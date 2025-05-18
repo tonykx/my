@@ -2,98 +2,279 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Viva Puro</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
-      text-align: center;
-      padding: 50px;
-      color: #222;
-    }
-    .contador {
-      font-size: 40px;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-    .versiculo {
-      margin-top: 40px;
-      font-style: italic;
-      font-size: 18px;
-      color: #555;
-    }
-    .compartilhar {
-      margin-top: 30px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #4caf50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Viva Puro Avançado</title>
+<style>
+  :root {
+    --cor-fundo-dia: #f3f3f3;
+    --cor-texto-dia: #222;
+    --cor-fundo-noite: #222;
+    --cor-texto-noite: #eee;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--cor-fundo-dia);
+    color: var(--cor-texto-dia);
+    text-align: center;
+    padding: 40px 20px;
+    transition: background-color 0.5s, color 0.5s;
+  }
+
+  body.noite {
+    background-color: var(--cor-fundo-noite);
+    color: var(--cor-texto-noite);
+  }
+
+  h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+
+  .contador {
+    font-size: 28px;
+    font-weight: bold;
+    color: #4caf50;
+    margin-bottom: 20px;
+  }
+
+  .versiculo {
+    font-style: italic;
+    font-size: 18px;
+    max-width: 600px;
+    margin: 30px auto 20px;
+  }
+
+  .mensagem {
+    font-size: 16px;
+    margin-bottom: 25px;
+    color: #666;
+  }
+
+  button, select {
+    margin: 8px 5px;
+    padding: 10px 18px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  button {
+    background-color: #4caf50;
+    color: white;
+  }
+
+  button:hover {
+    background-color: #45a045;
+  }
+
+  select {
+    background-color: #ddd;
+    color: #222;
+  }
+
+  textarea {
+    width: 90%;
+    max-width: 600px;
+    height: 90px;
+    margin: 20px auto 10px;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    resize: vertical;
+  }
+
+  #statusDiario {
+    margin-top: 8px;
+    color: green;
+    font-weight: bold;
+  }
+
+  #estatisticas {
+    margin-top: 30px;
+    font-size: 16px;
+  }
+
+</style>
 </head>
 <body>
+
   <h1>Você está limpo há:</h1>
   <div class="contador" id="tempo">Carregando...</div>
 
-  <div class="compartilhar">
-    <button onclick="compartilhar()">Compartilhar</button>
+  <div class="versiculo" id="versiculo">Versículo do dia</div>
+  <div class="mensagem" id="mensagem">Mensagem motivacional</div>
+
+  <button onclick="compartilhar()">Compartilhar no WhatsApp</button>
+  <button onclick="resetar()">Recomeçar Contador</button>
+
+  <div>
+    <label for="temaSelect">Escolha o tema:</label>
+    <select id="temaSelect" onchange="mudarTema()">
+      <option value="auto">Automático</option>
+      <option value="dia">Claro (Dia)</option>
+      <option value="noite">Escuro (Noite)</option>
+    </select>
   </div>
 
-  <div class="versiculo">“Bem-aventurados os puros de coração, porque verão a Deus.” – Mateus 5:8</div>
+  <textarea id="diario" placeholder="Como você está se sentindo hoje?"></textarea>
+  <br/>
+  <button onclick="salvarDiario()">Salvar Diário</button>
+  <div id="statusDiario"></div>
 
-  <script>
-    function iniciarContagem() {
-      let inicio = localStorage.getItem("dataInicio");
-      if (!inicio) {
-        inicio = new Date().toISOString();
-        localStorage.setItem("dataInicio", inicio);
-      }
-      return new Date(inicio);
+  <div id="estatisticas"></div>
+
+<script>
+  // =========== CONTROLE DE DATA INICIO =============
+  let inicio = localStorage.getItem("dataInicio");
+  if (!inicio) {
+    inicio = new Date().toISOString();
+    localStorage.setItem("dataInicio", inicio);
+  }
+  inicio = new Date(inicio);
+
+  // =========== ATUALIZA TEMPO =============
+  function atualizarTempo() {
+    const agora = new Date();
+    const diffMs = agora - inicio;
+
+    const dias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const horas = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
+    const minutos = Math.floor((diffMs / (1000 * 60)) % 60);
+    const segundos = Math.floor((diffMs / 1000) % 60);
+
+    document.getElementById("tempo").textContent =
+      `${dias} dias, ${horas}h ${minutos}min ${segundos}s`;
+
+    atualizarEstatisticas(dias);
+  }
+  setInterval(atualizarTempo, 1000);
+  atualizarTempo();
+
+  // =========== VERSICULO ROTATIVO DIARIO ============
+  const versiculos = [
+    "“Bem-aventurados os puros de coração, porque verão a Deus.” – Mateus 5:8",
+    "“Fugi da impureza. Vosso corpo é templo do Espírito Santo.” – 1 Coríntios 6:18-19",
+    "“Como purificará o jovem o seu caminho? Observando-o conforme a tua palavra.” – Salmo 119:9",
+    "“Não vos conformeis com este mundo...” – Romanos 12:2"
+  ];
+  const indexHoje = new Date().getDate() % versiculos.length;
+  document.getElementById("versiculo").textContent = versiculos[indexHoje];
+
+  // =========== MENSAGEM MOTIVACIONAL ALEATORIA ============
+  const mensagens = [
+    "Continue firme! Um dia de cada vez.",
+    "Você está vencendo a si mesmo!",
+    "Deus te dá forças para continuar.",
+    "A pureza é uma escolha diária.",
+    "Você é mais forte do que pensa.",
+    "Permanecer firme te aproxima de Deus."
+  ];
+  const aleatoria = mensagens[Math.floor(Math.random() * mensagens.length)];
+  document.getElementById("mensagem").textContent = aleatoria;
+
+  // =========== COMPARTILHAR NO WHATSAPP ============
+  function compartilhar() {
+    const tempo = document.getElementById("tempo").textContent;
+    const msg = `Estou limpo há ${tempo} graças a Deus! #VivaPuro`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`);
+  }
+
+  // =========== RESETAR CONTADOR ============
+  function resetar() {
+    if (confirm("Tem certeza que deseja reiniciar o contador?")) {
+      const agora = new Date().toISOString();
+      localStorage.setItem("dataInicio", agora);
+      inicio = new Date(agora);
+      atualizarTempo();
+      alert("Contador reiniciado!");
     }
+  }
 
-    function atualizarContador() {
-      const inicio = iniciarContagem();
-      const agora = new Date();
-      const diffMs = agora - inicio;
+  // =========== DIÁRIO SIMPLES ============
+  const diario = document.getElementById("diario");
+  const statusDiario = document.getElementById("statusDiario");
 
-      const segundos = Math.floor(diffMs / 1000) % 60;
-      const minutos = Math.floor(diffMs / (1000 * 60)) % 60;
-      const horas = Math.floor(diffMs / (1000 * 60 * 60)) % 24;
-      const dias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  diario.value = localStorage.getItem("diario") || "";
 
-      document.getElementById("tempo").textContent = 
-        `${dias} dias, ${horas} horas, ${minutos} minutos, ${segundos} segundos`;
-    }
+  function salvarDiario() {
+    localStorage.setItem("diario", diario.value);
+    statusDiario.textContent = "Diário salvo!";
+    setTimeout(() => statusDiario.textContent = "", 3000);
+  }
 
-    function compartilhar() {
-      const texto = document.getElementById("tempo").textContent;
-      const mensagem = `Glória a Deus! Estou limpo há ${texto}!
-“Bem-aventurados os puros de coração, porque verão a Deus.” – Mateus 5:8`;
+  // =========== MODO NOTURNO AUTOMÁTICO ============
+  const temaSelect = document.getElementById("temaSelect");
 
-      if (navigator.share) {
-        navigator.share({
-          title: 'Viva Puro',
-          text: mensagem,
-          url: window.location.href
-        }).catch((error) => console.log('Erro ao compartilhar:', error));
+  function aplicarTema(tema) {
+    if (tema === "noite") {
+      document.body.classList.add("noite");
+    } else if (tema === "dia") {
+      document.body.classList.remove("noite");
+    } else {
+      // automático
+      const hora = new Date().getHours();
+      if (hora >= 19 || hora < 6) {
+        document.body.classList.add("noite");
       } else {
-        alert("Compartilhamento não suportado neste navegador. Copie e cole manualmente:
-
-" + mensagem);
+        document.body.classList.remove("noite");
       }
     }
+  }
 
-    setInterval(atualizarContador, 1000);
-    atualizarContador();
-  </script>
+  temaSelect.value = localStorage.getItem("temaEscolhido") || "auto";
+  aplicarTema(temaSelect.value);
+
+  temaSelect.addEventListener("change", () => {
+    const escolha = temaSelect.value;
+    localStorage.setItem("temaEscolhido", escolha);
+    aplicarTema(escolha);
+  });
+
+  // =========== ESTATÍSTICAS SIMPLES ============
+  function atualizarEstatisticas(dias) {
+    // Exemplo: Quantos dias no mês atual
+    const hoje = new Date();
+    const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+    let diasNoMesLimpos = 0;
+
+    // Se o início for antes desse mês, conta todos os dias do mês atual
+    if (inicio <= primeiroDiaMes) {
+      diasNoMesLimpos = hoje.getDate();
+    } else {
+      // Se começou esse mês, conta os dias desde o início
+      diasNoMesLimpos = Math.max(0, Math.floor((hoje - inicio) / (1000 * 60 * 60 * 24)) + 1);
+    }
+
+    document.getElementById("estatisticas").textContent =
+      `Você está limpo há ${dias} dias no total. ` +
+      `Neste mês, são ${diasNoMesLimpos} dias limpos.`;
+  }
+
+  // =========== NOTIFICAÇÕES ============
+  // Pede permissão ao carregar
+  if ("Notification" in window) {
+    if (Notification.permission === "default") {
+      Notification.requestPermission();
+    }
+  }
+
+  // Função para enviar lembrete
+  function enviarNotificacao() {
+    if (Notification.permission === "granted") {
+      new Notification("Viva Puro", {
+        body: "Continue firme! Você está indo muito bem.",
+        icon: "https://cdn-icons-png.flaticon.com/512/616/616408.png"
+      });
+    }
+  }
+
+  // Envia notificação a cada 6 horas
+  setInterval(enviarNotificacao, 6 * 60 * 60 * 1000);
+
+</script>
 </body>
 </html>
