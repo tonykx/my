@@ -7,10 +7,10 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #e0e0e0;
+      background-color: #f3f3f3;
       text-align: center;
       padding: 50px;
-      color: #333;
+      color: #000;
     }
     .contador {
       font-size: 40px;
@@ -22,17 +22,24 @@
       font-style: italic;
       font-size: 18px;
     }
+    .compartilhar {
+      margin-top: 30px;
+    }
     button {
-      margin-top: 20px;
       padding: 10px 20px;
       font-size: 16px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <h1>Você está limpo há:</h1>
   <div class="contador" id="tempo">Carregando...</div>
-  <button onclick="resetarInicio()">Resetar Contagem</button>
+
+  <div class="compartilhar">
+    <button onclick="compartilhar()">Compartilhar</button>
+  </div>
+
   <div class="versiculo">“Bem-aventurados os puros de coração, porque verão a Deus.” – Mateus 5:8</div>
 
   <script>
@@ -59,9 +66,20 @@
         `${dias} dias, ${horas} horas, ${minutos} minutos, ${segundos} segundos`;
     }
 
-    function resetarInicio() {
-      localStorage.removeItem("dataInicio");
-      location.reload();
+    function compartilhar() {
+      const texto = document.getElementById("tempo").textContent;
+      const mensagem = `Glória a Deus! Estou limpo há ${texto}!
+“Bem-aventurados os puros de coração, porque verão a Deus.” – Mateus 5:8`;
+
+      if (navigator.share) {
+        navigator.share({
+          title: 'Viva Puro',
+          text: mensagem,
+          url: window.location.href
+        });
+      } else {
+        alert("Recurso de compartilhamento não disponível neste navegador.");
+      }
     }
 
     setInterval(atualizarContador, 1000);
