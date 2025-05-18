@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Viva Puro</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      text-align: center;
+      padding: 50px;
+      color: #222;
+    }
+    .contador {
+      font-size: 40px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .versiculo {
+      margin-top: 40px;
+      font-style: italic;
+      font-size: 18px;
+      color: #555;
+    }
+    .compartilhar {
+      margin-top: 30px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>Você está limpo há:</h1>
+  <div class="contador" id="tempo">Carregando...</div>
+
+  <div class="compartilhar">
+    <button onclick="compartilhar()">Compartilhar</button>
+  </div>
+
+  <div class="versiculo">“Bem-aventurados os puros de coração, porque verão a Deus.” – Mateus 5:8</div>
+
+  <script>
+    function iniciarContagem() {
+      let inicio = localStorage.getItem("dataInicio");
+      if (!inicio) {
+        inicio = new Date().toISOString();
+        localStorage.setItem("dataInicio", inicio);
+      }
+      return new Date(inicio);
+    }
+
+    function atualizarContador() {
+      const inicio = iniciarContagem();
+      const agora = new Date();
+      const diffMs = agora - inicio;
+
+      const segundos = Math.floor(diffMs / 1000) % 60;
+      const minutos = Math.floor(diffMs / (1000 * 60)) % 60;
+      const horas = Math.floor(diffMs / (1000 * 60 * 60)) % 24;
+      const dias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+      document.getElementById("tempo").textContent = 
+        `${dias} dias, ${horas} horas, ${minutos} minutos, ${segundos} segundos`;
+    }
+
+    function compartilhar() {
+      const texto = document.getElementById("tempo").textContent;
+      const mensagem = `Glória a Deus! Estou limpo há ${texto}!
+“Bem-aventurados os puros de coração, porque verão a Deus.” – Mateus 5:8`;
+
+      if (navigator.share) {
+        navigator.share({
+          title: 'Viva Puro',
+          text: mensagem,
+          url: window.location.href
+        }).catch((error) => console.log('Erro ao compartilhar:', error));
+      } else {
+        alert("Compartilhamento não suportado neste navegador. Copie e cole manualmente:
+
+" + mensagem);
+      }
+    }
+
+    setInterval(atualizarContador, 1000);
+    atualizarContador();
+  </script>
+</body>
+</html>
