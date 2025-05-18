@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Viva Puro</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f3f3;
+      text-align: center;
+      padding: 50px;
+    }
+    .contador {
+      font-size: 40px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .versiculo {
+      margin-top: 40px;
+      font-style: italic;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Você está limpo há:</h1>
+  <div class="contador" id="dias">0 dias</div>
+
+  <div class="versiculo">“Bem-aventurados os puros de coração, porque verão a Deus.” – Mateus 5:8</div>
+
+  <script>
+    const inicio = new Date("2025-03-24");
+    const hoje = new Date();
+    const diff = Math.floor((hoje - inicio) / (1000 * 60 * 60 * 24));
+    document.getElementById("dias").textContent = `${diff} dias`;
+  </script>
+</body>
+</html>
