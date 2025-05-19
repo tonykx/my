@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -5,25 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TonyApp</title>
   <style>
-    :root {
-      --cor-fundo-dia: #f3f3f3;
-      --cor-texto-dia: #222;
-      --cor-fundo-noite: #222;
-      --cor-texto-noite: #eee;
-    }
-
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--cor-fundo-dia);
-      color: var(--cor-texto-dia);
+      background-color: #121212;
+      color: #eee;
       text-align: center;
       padding: 40px 20px;
       transition: background-color 0.5s, color 0.5s;
-    }
-
-    body.noite {
-      background-color: var(--cor-fundo-noite);
-      color: var(--cor-texto-noite);
     }
 
     h1 {
@@ -48,19 +37,16 @@
     .mensagem {
       font-size: 16px;
       margin-bottom: 25px;
-      color: #666;
+      color: #aaa;
     }
 
-    button, select {
+    button {
       margin: 8px 5px;
       padding: 10px 18px;
       font-size: 16px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-    }
-
-    button {
       background-color: #4caf50;
       color: white;
     }
@@ -69,25 +55,51 @@
       background-color: #45a045;
     }
 
-    select {
-      background-color: #ddd;
-      color: #222;
-    }
-
-    #estatisticas {
-      margin-top: 30px;
-      font-size: 16px;
-    }
-
-    #visitas {
-      margin-top: 15px;
+    #estatisticas, #visitas {
+      margin-top: 20px;
       font-size: 14px;
-      color: #777;
+      color: #ccc;
+    }
+
+    .tela {
+      display: none;
+    }
+
+    .ativa {
+      display: block;
+    }
+
+    input[type="date"] {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
 
+<div id="tela1" class="tela">
+  <h1>Parabéns pela decisão!</h1>
+  <p>Essa é uma das melhores escolhas que você poderia fazer para sua vida espiritual, emocional e física.</p>
+  <button onclick="irPara(2)">Continuar</button>
+</div>
+
+<div id="tela2" class="tela">
+  <h1>Benefícios da sua decisão</h1>
+  <p>- Clareza mental<br>- Mais conexão com Deus<br>- Aumento da autoestima<br>- Vitória sobre a carne</p>
+  <button onclick="irPara(3)">Continuar</button>
+</div>
+
+<div id="tela3" class="tela">
+  <h1>Quando você parou?</h1>
+  <input type="date" id="dataInicio" />
+  <br><br>
+  <button onclick="salvarData()">Continuar</button>
+</div>
+
+<div id="principal" class="tela">
   <h1>Você está limpo há:</h1>
   <div class="contador" id="tempo">Carregando...</div>
 
@@ -97,130 +109,107 @@
   <button onclick="compartilhar()">Compartilhar no WhatsApp</button>
   <button onclick="resetar()">Recomeçar Contador</button>
 
-  <div>
-    <label for="temaSelect">Escolha o tema:</label>
-    <select id="temaSelect" onchange="mudarTema()">
-      <option value="auto">Automático</option>
-      <option value="dia">Claro (Dia)</option>
-      <option value="noite">Escuro (Noite)</option>
-    </select>
-  </div>
-
   <div id="estatisticas"></div>
   <div id="visitas"></div>
+</div>
 
 <script>
-  // =========== DATA FIXA ============
-  const inicio = new Date("2025-05-19T11:30:00");
-
-  // =========== ATUALIZA TEMPO ============
-  function atualizarTempo() {
-    const agora = new Date();
-    const diffMs = agora - inicio;
-
-    const dias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    const horas = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
-    const minutos = Math.floor((diffMs / (1000 * 60)) % 60);
-    const segundos = Math.floor((diffMs / 1000) % 60);
-
-    document.getElementById("tempo").textContent =
-      `${dias} dias, ${horas}h ${minutos}min ${segundos}s`;
-
-    atualizarEstatisticas(dias);
-  }
-  setInterval(atualizarTempo, 1000);
-  atualizarTempo();
-
-  // =========== VERSÍCULO ============
-  const versiculos = [
-    "“Bem-aventurados os puros de coração, porque verão a Deus.” – Mateus 5:8",
-    "“Fugi da impureza. Vosso corpo é templo do Espírito Santo.” – 1 Coríntios 6:18-19",
-    "“Como purificará o jovem o seu caminho? Observando-o conforme a tua palavra.” – Salmo 119:9",
-    "“Não vos conformeis com este mundo...” – Romanos 12:2"
-  ];
-  const indexHoje = new Date().getDate() % versiculos.length;
-  document.getElementById("versiculo").textContent = versiculos[indexHoje];
-
-  // =========== MENSAGEM ============
-  const mensagens = [
-    "Continue firme! Um dia de cada vez.",
-    "Você está vencendo a si mesmo!",
-    "Deus te dá forças para continuar.",
-    "A pureza é uma escolha diária.",
-    "Você é mais forte do que pensa.",
-    "Permanecer firme te aproxima de Deus."
-  ];
-  document.getElementById("mensagem").textContent = mensagens[Math.floor(Math.random() * mensagens.length)];
-
-  // =========== WHATSAPP ============
-  function compartilhar() {
-    const tempo = document.getElementById("tempo").textContent;
-    const msg = `Estou limpo há ${tempo} graças a Deus! #TonyApp`;
-    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`);
-  }
-
-  // =========== RESETAR ============
-  function resetar() {
-    alert("Esse contador tem data fixa e não pode ser reiniciado.");
-  }
-
-  // =========== TEMA ============
-  const temaSelect = document.getElementById("temaSelect");
-
-  function aplicarTema(tema) {
-    if (tema === "noite") {
-      document.body.classList.add("noite");
-    } else if (tema === "dia") {
-      document.body.classList.remove("noite");
-    } else {
-      const hora = new Date().getHours();
-      if (hora >= 19 || hora < 6) {
-        document.body.classList.add("noite");
-      } else {
-        document.body.classList.remove("noite");
-      }
+  function irPara(n) {
+    for (let i = 1; i <= 3; i++) {
+      document.getElementById("tela" + i).classList.remove("ativa");
     }
+    document.getElementById("tela" + n).classList.add("ativa");
   }
 
-  temaSelect.value = localStorage.getItem("temaEscolhido") || "auto";
-  aplicarTema(temaSelect.value);
-  temaSelect.addEventListener("change", () => {
-    const escolha = temaSelect.value;
-    localStorage.setItem("temaEscolhido", escolha);
-    aplicarTema(escolha);
-  });
+  function salvarData() {
+    const data = document.getElementById("dataInicio").value;
+    if (!data) {
+      alert("Por favor, selecione uma data.");
+      return;
+    }
+    localStorage.setItem("inicioTonyApp", data);
+    localStorage.setItem("inicializadoTonyApp", "sim");
+    iniciarApp();
+  }
 
-  // =========== ESTATÍSTICAS ============
+  function iniciarApp() {
+    document.querySelectorAll(".tela").forEach(t => t.classList.remove("ativa"));
+    document.getElementById("principal").classList.add("ativa");
+
+    const dataSalva = localStorage.getItem("inicioTonyApp");
+    if (!dataSalva) return;
+    const inicio = new Date(dataSalva + "T00:00:00");
+
+    function atualizarTempo() {
+      const agora = new Date();
+      const diff = agora - inicio;
+      const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutos = Math.floor((diff / (1000 * 60)) % 60);
+      const segundos = Math.floor((diff / 1000) % 60);
+      document.getElementById("tempo").textContent =
+        `${dias} dias, ${horas}h ${minutos}min ${segundos}s`;
+      atualizarEstatisticas(dias);
+    }
+
+    setInterval(atualizarTempo, 1000);
+    atualizarTempo();
+
+    const versiculos = [
+      "“Bem-aventurados os puros de coração, porque verão a Deus.” – Mateus 5:8",
+      "“Fugi da impureza. Vosso corpo é templo do Espírito Santo.” – 1 Coríntios 6:18-19",
+      "“Como purificará o jovem o seu caminho? Observando-o conforme a tua palavra.” – Salmo 119:9",
+      "“Não vos conformeis com este mundo...” – Romanos 12:2"
+    ];
+    const indexHoje = new Date().getDate() % versiculos.length;
+    document.getElementById("versiculo").textContent = versiculos[indexHoje];
+
+    const mensagens = [
+      "Continue firme! Um dia de cada vez.",
+      "Você está vencendo a si mesmo!",
+      "Deus te dá forças para continuar.",
+      "A pureza é uma escolha diária.",
+      "Você é mais forte do que pensa.",
+      "Permanecer firme te aproxima de Deus."
+    ];
+    document.getElementById("mensagem").textContent = mensagens[Math.floor(Math.random() * mensagens.length)];
+
+    let visitas = localStorage.getItem("visitasTonyApp") || 0;
+    visitas = parseInt(visitas) + 1;
+    localStorage.setItem("visitasTonyApp", visitas);
+    document.getElementById("visitas").textContent = `Número de visitas neste navegador: ${visitas}`;
+  }
+
   function atualizarEstatisticas(dias) {
     const hoje = new Date();
+    const inicio = new Date(localStorage.getItem("inicioTonyApp") + "T00:00:00");
     const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
     let diasNoMesLimpos = inicio <= primeiroDiaMes ? hoje.getDate() : Math.max(0, Math.floor((hoje - inicio) / (1000 * 60 * 60 * 24)) + 1);
     document.getElementById("estatisticas").textContent =
       `Você está limpo há ${dias} dias no total. Neste mês, são ${diasNoMesLimpos} dias limpos.`;
   }
 
-  // =========== CONTADOR DE VISITAS ============
-  let visitas = localStorage.getItem("visitasTonyApp") || 0;
-  visitas = parseInt(visitas) + 1;
-  localStorage.setItem("visitasTonyApp", visitas);
-  document.getElementById("visitas").textContent = `Número de visitas a este site neste navegador: ${visitas}`;
-
-  // =========== NOTIFICAÇÕES ============
-  if ("Notification" in window && Notification.permission === "default") {
-    Notification.requestPermission();
+  function compartilhar() {
+    const tempo = document.getElementById("tempo").textContent;
+    const msg = `Estou limpo há ${tempo} graças a Deus! #TonyApp`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`);
   }
 
-  function enviarNotificacao() {
-    if (Notification.permission === "granted") {
-      new Notification("TonyApp", {
-        body: "Continue firme! Você está indo muito bem.",
-        icon: "https://cdn-icons-png.flaticon.com/512/616/616408.png"
-      });
+  function resetar() {
+    if (confirm("Deseja recomeçar o contador?")) {
+      localStorage.removeItem("inicioTonyApp");
+      localStorage.removeItem("inicializadoTonyApp");
+      location.reload();
     }
   }
 
-  setInterval(enviarNotificacao, 6 * 60 * 60 * 1000);
-
+  // Início
+  if (localStorage.getItem("inicializadoTonyApp") === "sim") {
+    iniciarApp();
+  } else {
+    irPara(1);
+  }
 </script>
+
 </body>
 </html>
