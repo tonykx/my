@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TonyApp</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #121212;
+      color: #eee;
+      text-align: center;
+      padding: 40px 20px;
+      transition: background-color 0.5s, color 0.5s;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .contador {
+      font-size: 28px;
+      font-weight: bold;
+      color: #4caf50;
+      margin-bottom: 20px;
+    }
+
+    .versiculo {
+      font-style: italic;
+      font-size: 18px;
+      max-width: 600px;
+      margin: 30px auto 20px;
+    }
+
+    .mensagem {
+      font-size: 16px;
+      margin-bottom: 25px;
+      color: #aaa;
+    }
+
+    button {
+      margin: 8px 5px;
+      padding: 10px 18px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #4caf50;
+      color: white;
+    }
+
+    button:hover {
+      background-color: #45a045;
+    }
+
+    #estatisticas, #visitas {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .tela {
+      display: none;
+    }
+
+    .ativa {
+      display: block;
+    }
+
+    input[type="date"] {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="tela1" class="tela">
+  <h1>Parabéns pela decisão!</h1>
+  <p>Essa é uma das melhores escolhas que você poderia fazer para sua vida espiritual, emocional e física.</p>
+  <button onclick="irPara(2)">Continuar</button>
+</div>
+
+<div id="tela2" class="tela">
+  <h1>Benefícios da sua decisão</h1>
+  <p>- Clareza mental<br>- Mais conexão com Deus<br>- Aumento da autoestima<br>- Vitória sobre a carne</p>
+  <button onclick="irPara(3)">Continuar</button>
+</div>
+
+<div id="tela3" class="tela">
+  <h1>Quando você parou?</h1>
+  <input type="date" id="dataInicio" />
+  <br><br>
+  <button onclick="salvarData()">Continuar</button>
+</div>
+
+<div id="principal" class="tela">
+  <h1>Você está limpo há:</h1>
+  <div class="contador" id="tempo">Carregando...</div>
+
+  <div class="versiculo" id="versiculo">Versículo do dia</div>
+  <div class="mensagem" id="mensagem">Mensagem motivacional</div>
+
+  <button onclick="compartilhar()">Compartilhar no WhatsApp</button>
+  <button onclick="resetar()">Recomeçar Contador</button>
+
+  <div id="estatisticas"></div>
+  <div id="visitas"></div>
+</div>
+
+<script>
+  function irPara(n) {
+    for (let i = 1; i <= 3; i++) {
+      document.getElementById("tela" + i).classList.remove("ativa");
+    }
+    document.getElementById("tela" + n).classList.add("ativa");
+  }
+
+  function salvarData() {
+    const data = document.getElementById("dataInicio").value;
+    if (!data) {
+      alert("Por favor, selecione uma data.");
+      return;
+    }
+    localStorage.setItem("inicioTonyApp", data);
+    localStorage.setItem("inicializadoTonyApp", "sim");
+    iniciarApp();
+  }
+
+  function iniciarApp() {
+    document.querySelectorAll(".tela").forEach(t => t.classList.remove("ativa"));
+    document.getElementById("principal").classList.add("ativa");
+
+    const dataSalva = localStorage.getItem("inicioTonyApp");
+    if (!dataSalva) return;
+    const inicio = new Date(dataSalva + "T00:00:00");
+
+    function atualizarTempo() {
+      const agora = new Date();
+      const diff = agora - inicio;
+      const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutos = Math.floor((diff / (1000 * 60)) % 60);
+      const segundos = Math.floor((diff / 1000) % 60);
+      document.getElementById("tempo").textContent =
+        `${dias} dias, ${horas}h ${minutos}min ${segundos}s`;
+      atualizarEstatisticas(dias);
+    }
+
+    setInterval(atualizarTempo, 1000);
+    atualizarTempo();
+
+    const versiculos = [
+      "“Bem-aventurados os puros de coração, porque verão a Deus.” – Mateus 5:8",
+      "“Fugi da impureza. Vosso corpo é templo do Espírito Santo.” – 1 Coríntios 6:18-19",
+      "“Como purificará o jovem o seu caminho? Observando-o conforme a tua palavra.” – Salmo 119:9",
+      "“Não vos conformeis com este mundo...” – Romanos 12:2"
+    ];
+    const indexHoje = new Date().getDate() % versiculos.length;
+    document.getElementById("versiculo").textContent = versiculos[indexHoje];
+
+    const mensagens = [
+      "Continue firme! Um dia de cada vez.",
+      "Você está vencendo a si mesmo!",
+      "Deus te dá forças para continuar.",
+      "A pureza é uma escolha diária.",
+      "Você é mais forte do que pensa.",
+      "Permanecer firme te aproxima de Deus."
+    ];
+    document.getElementById("mensagem").textContent = mensagens[Math.floor(Math.random() * mensagens.length)];
+
+    let visitas = localStorage.getItem("visitasTonyApp") || 0;
+    visitas = parseInt(visitas) + 1;
+    localStorage.setItem("visitasTonyApp", visitas);
+    document.getElementById("visitas").textContent = `Número de visitas neste navegador: ${visitas}`;
+  }
+
+  function atualizarEstatisticas(dias) {
+    const hoje = new Date();
+    const inicio = new Date(localStorage.getItem("inicioTonyApp") + "T00:00:00");
+    const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+    let diasNoMesLimpos = inicio <= primeiroDiaMes ? hoje.getDate() : Math.max(0, Math.floor((hoje - inicio) / (1000 * 60 * 60 * 24)) + 1);
+    document.getElementById("estatisticas").textContent =
+      `Você está limpo há ${dias} dias no total. Neste mês, são ${diasNoMesLimpos} dias limpos.`;
+  }
+
+  function compartilhar() {
+    const tempo = document.getElementById("tempo").textContent;
+    const msg = `Estou limpo há ${tempo} graças a Deus! #TonyApp`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`);
+  }
+
+  function resetar() {
+    if (confirm("Deseja recomeçar o contador?")) {
+      localStorage.removeItem("inicioTonyApp");
+      localStorage.removeItem("inicializadoTonyApp");
+      location.reload();
+    }
+  }
+
+  // Início
+  if (localStorage.getItem("inicializadoTonyApp") === "sim") {
+    iniciarApp();
+  } else {
+    irPara(1);
+  }
+</script>
+
+</body>
+</html>
