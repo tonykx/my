@@ -1,215 +1,387 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TonyApp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bot - Seu Bot de WhatsApp</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #121212;
-      color: #eee;
-      text-align: center;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #181818;
+      color: #e0e0e0;
+      line-height: 1.6;
+      position: relative;
+    }
+    header {
+      background-color: #2c3e50;
+      color: #fff;
       padding: 40px 20px;
-      transition: background-color 0.5s, color 0.5s;
+      text-align: center;
+      border-bottom: 5px solid #34495e;
     }
-
-    h1 {
-      font-size: 32px;
-      margin-bottom: 10px;
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 30px;
+      background: #222;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
-
-    .contador {
-      font-size: 28px;
-      font-weight: bold;
-      color: #4caf50;
-      margin-bottom: 20px;
+    h2 {
+      color: #3498db;
+      margin-top: 30px;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 10px;
     }
-
-    .versiculo {
-      font-style: italic;
-      font-size: 18px;
-      max-width: 600px;
-      margin: 30px auto 20px;
+    ul {
+      padding-left: 20px;
+      list-style-type: disc;
     }
-
-    .mensagem {
-      font-size: 16px;
-      margin-bottom: 25px;
-      color: #aaa;
-    }
-
-    button {
-      margin: 8px 5px;
-      padding: 10px 18px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      background-color: #4caf50;
-      color: white;
-    }
-
-    button:hover {
-      background-color: #45a045;
-    }
-
-    #estatisticas, #visitas {
-      margin-top: 20px;
-      font-size: 14px;
+    li {
+      margin-bottom: 12px;
       color: #ccc;
     }
-
-    .tela {
-      display: none;
+    strong {
+      color: #eee;
+    }
+    .price-box {
+      background: #333;
+      padding: 25px;
+      border: 2px dashed #3498db;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #3498db;
+      margin-bottom: 20px;
+    }
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+      margin-bottom: 40px;
+    }
+    .btn {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 14px 30px;
+      font-size: 1.1em;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .btn:hover {
+      background-color: #2980b9;
+      transform: scale(1.05);
+    }
+    footer {
+      text-align: center;
+      padding: 25px;
+      font-size: 0.9em;
+      color: #777;
+      border-top: 1px solid #333;
     }
 
-    .ativa {
+    /* Estilos para a aba e lista de comandos categorizados */
+    .commands-tab-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 10;
+    }
+    .commands-tab-button {
+      background-color: #3498db;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    .commands-tab-button:hover {
+      background-color: #2980b9;
+      transform: translateY(-2px);
+    }
+    .commands-tab-button::before {
+      content: '\2699'; /* Ícone de engrenagem */
+      margin-right: 8px;
+    }
+
+    .commands-list-container {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background-color: #333;
+      border: 1px solid #555;
+      border-radius: 8px;
+      padding: 15px;
+      z-index: 9;
+      display: none;
+      width: 300px; /* Aumentei um pouco a largura */
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    }
+    .commands-list-container.show {
       display: block;
     }
 
-    input[type="date"] {
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 5px;
+    .command-category {
+      color: #eee;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #555;
+      margin-bottom: 10px;
+    }
+    .command-category h4 {
+      color: #3498db;
+      margin-top: 0;
+      margin-bottom: 5px;
+      font-size: 1.1em;
+    }
+    .command-item {
+      color: #ccc;
+      padding: 8px 0;
+      cursor: pointer;
+      transition: color 0.3s ease, padding-left 0.2s ease;
+    }
+    .command-item:hover {
+      color: #3498db;
+      padding-left: 10px;
+    }
+    .command-item i {
+      margin-right: 8px;
+      width: 1.2em;
+      text-align: center;
+    }
+
+    /* Estilos para a sobreposição e detalhes do comando */
+    .command-details-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 10;
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+    .command-details-overlay.show {
+      display: flex;
+    }
+
+    .command-details-container {
+      background-color: #222;
+      color: #e0e0e0;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+      z-index: 11;
+      width: 90%;
+      max-width: 600px;
+    }
+    .command-details-container h3 {
+      color: #3498db;
+      margin-top: 0;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 15px;
+    }
+    .command-details-container p {
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+    .command-details-container strong {
+      color: #fff;
+    }
+    .command-details-container .close-btn {
+      background-color: #555;
+      color: white;
       border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      float: right;
       margin-top: 15px;
+    }
+    .command-details-container .close-btn:hover {
+      background-color: #777;
     }
   </style>
 </head>
 <body>
+  <header>
+    <h1>bot - Seu Bot de WhatsApp</h1>
+    <p>Automatize, proteja e controle seu grupo com comandos poderosos!</p>
+  </header>
 
-<div id="tela1" class="tela">
-  <h1>Parabéns pela decisão!</h1>
-  <p>Essa é uma das melhores escolhas que você poderia fazer para sua vida espiritual, emocional e física.</p>
-  <button onclick="irPara(2)">Continuar</button>
-</div>
+  <div class="commands-tab-container">
+    <div class="commands-tab-button"><i class="fas fa-cog"></i> Comandos</div>
+    <div class="commands-list-container">
+    </div>
+  </div>
 
-<div id="tela2" class="tela">
-  <h1>Benefícios da sua decisão</h1>
-  <p>- Clareza mental<br>- Mais conexão com Deus<br>- Aumento da autoestima<br>- Vitória sobre a carne</p>
-  <button onclick="irPara(3)">Continuar</button>
-</div>
+  <div class="command-details-overlay">
+    <div class="command-details-container">
+      <h3 id="command-title"></h3>
+      <p id="command-description"></p>
+      <p><strong>Como usar:</strong> <span id="command-usage"></span></p>
+      <button class="close-btn">Fechar</button>
+    </div>
+  </div>
 
-<div id="tela3" class="tela">
-  <h1>Quando você parou?</h1>
-  <input type="date" id="dataInicio" />
-  <br><br>
-  <button onclick="salvarData()">Continuar</button>
-</div>
+  <div class="container">
+    <section>
+      <h2>Funções do bot</h2>
+      <ul>
+        <li><strong>Anti-Link:</strong> Remove automaticamente links indesejados no grupo.</li>
+        <li><strong>Anti-Fake:</strong> Bloqueia automaticamente membros com números fora do padrão.</li>
+        <li><strong>Rastreamento de Admin:</strong> Detecta e anuncia quem promove ou remove administradores.</li>
+        <li><strong>Auto-Respostas e Anti-Spam:</strong> Responde automaticamente e controla o fluxo do grupo.</li>
+        <li><strong>Downloads:</strong> Comandos como <code>!play</code> e <code>!filmes</code>.</li>
+      </ul>
+    </section>
 
-<div id="principal" class="tela">
-  <h1>Você está limpo há:</h1>
-  <div class="contador" id="tempo">Carregando...</div>
+    <section>
+      <h2>Comandos Populares</h2>
+      <ul>
+        <li><span class="command-trigger" data-command="play"><code>!play nome da música</code></span> — Baixa músicas direto do YouTube</li>
+        <li><span class="command-trigger" data-command="filmes"><code>!filmes nome</code></span> — Busca informações sobre filmes</li>
+        <li><span class="command-trigger" data-command="antilink"><code>!antilink on/off</code></span> — Ativa ou desativa o anti-link</li>
+        <li><span class="command-trigger" data-command="admins"><code>!admins</code></span> — Lista todos os administradores</li>
+      </ul>
+    </section>
 
-  <div class="versiculo" id="versiculo">Versículo do dia</div>
-  <div class="mensagem" id="mensagem">Mensagem motivacional</div>
+    <section>
+      <h2>Aluguel Acessível</h2>
+      <div class="price-box">
+        Apenas <strong>R$ 10,00 / mês</strong>
+      </div>
+      <div class="buttons">
+        <a href="https://wa.me/557999959508" class="btn" target="_blank">Falar com Tony</a>
+      </div>
+    </section>
 
-  <button onclick="compartilhar()">Compartilhar no WhatsApp</button>
-  <button onclick="resetar()">Recomeçar Contador</button>
+  </div>
+  <footer>
+    © 2025 - bot. Controle total do seu grupo com um toque.
+  </footer>
 
-  <div id="estatisticas"></div>
-  <div id="visitas"></div>
-</div>
+  <script>
+    const commandsTabButton = document.querySelector('.commands-tab-button');
+    const commandsListContainer = document.querySelector('.commands-list-container');
+    const commandDetailsOverlay = document.querySelector('.command-details-overlay');
+    const commandDetailsContainer = document.querySelector('.command-details-container');
+    const commandTitleElement = document.getElementById('command-title');
+    const commandDescriptionElement = document.getElementById('command-description');
+    const commandUsageElement = document.getElementById('command-usage');
+    const closeDetailsButton = document.querySelector('.command-details-container .close-btn');
+    const commandTriggers = document.querySelectorAll('.command-trigger');
 
-<script>
-  function irPara(n) {
-    for (let i = 1; i <= 3; i++) {
-      document.getElementById("tela" + i).classList.remove("ativa");
+    const botCommands = {
+      "Administração": [
+        {
+          name: "!antilink",
+          description: "Ativa ou desativa a proteção contra links no grupo.",
+          usage: "!antilink on / !antilink off",
+          icon: "fas fa-link"
+        },
+        {
+          name: "!admins",
+          description: "Lista todos os administradores do grupo.",
+          usage: "!admins",
+          icon: "fas fa-users"
+        }
+        // Adicione mais comandos de administração aqui
+      ],
+      "Diversão": [
+        {
+          name: "!play",
+          description: "Baixa músicas diretamente do YouTube para compartilhar no grupo.",
+          usage: "!play [nome da música]",
+          icon: "fas fa-play"
+        },
+        {
+          name: "!filmes",
+          description: "Busca informações detalhadas sobre filmes.",
+          usage: "!filmes [nome do filme]",
+          icon: "fas fa-film"
+        }
+        // Adicione mais comandos de diversão aqui
+      ],
+      "Outros": [
+        // Adicione comandos que não se encaixam nas categorias acima
+      ]
+    };
+
+    // Função para exibir a lista de comandos categorizados
+    function showCommandsList() {
+      commandsListContainer.innerHTML = '';
+      for (const category in botCommands) {
+        if (botCommands.hasOwnProperty(category) && botCommands[category].length > 0) {
+          const categoryDiv = document.createElement('div');
+          categoryDiv.classList.add('command-category');
+          categoryDiv.innerHTML = `<h4>${category}</h4>`;
+
+          botCommands[category].forEach(command => {
+            const listItem = document.createElement('div');
+            listItem.classList.add('command-item');
+            listItem.innerHTML = `<i class="${command.icon || 'fas fa-question-circle'}"></i> <span>${command.name}</span>`;
+            listItem.addEventListener('click', () => showCommandDetails(command));
+            categoryDiv.appendChild(listItem);
+          });
+          commandsListContainer.appendChild(categoryDiv);
+        }
+      }
+      commandsListContainer.classList.toggle('show');
     }
-    document.getElementById("tela" + n).classList.add("ativa");
-  }
 
-  function salvarData() {
-    const data = document.getElementById("dataInicio").value;
-    if (!data) {
-      alert("Por favor, selecione uma data.");
-      return;
-    }
-    localStorage.setItem("inicioTonyApp", data);
-    localStorage.setItem("inicializadoTonyApp", "sim");
-    iniciarApp();
-  }
-
-  function iniciarApp() {
-    document.querySelectorAll(".tela").forEach(t => t.classList.remove("ativa"));
-    document.getElementById("principal").classList.add("ativa");
-
-    const dataSalva = localStorage.getItem("inicioTonyApp");
-    if (!dataSalva) return;
-    const inicio = new Date(dataSalva + "T00:00:00");
-
-    function atualizarTempo() {
-      const agora = new Date();
-      const diff = agora - inicio;
-      const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutos = Math.floor((diff / (1000 * 60)) % 60);
-      const segundos = Math.floor((diff / 1000) % 60);
-      document.getElementById("tempo").textContent =
-        `${dias} dias, ${horas}h ${minutos}min ${segundos}s`;
-      atualizarEstatisticas(dias);
+    // Função para exibir os detalhes de um comando
+    function showCommandDetails(command) {
+      commandTitleElement.textContent = command.name;
+      commandDescriptionElement.innerHTML = command.description;
+      commandUsageElement.innerHTML = command.usage;
+      commandDetailsOverlay.classList.add('show');
     }
 
-    setInterval(atualizarTempo, 1000);
-    atualizarTempo();
-
-    const versiculos = [
-      "“Bem-aventurados os puros de coração, porque verão a Deus.” – Mateus 5:8",
-      "“Fugi da impureza. Vosso corpo é templo do Espírito Santo.” – 1 Coríntios 6:18-19",
-      "“Como purificará o jovem o seu caminho? Observando-o conforme a tua palavra.” – Salmo 119:9",
-      "“Não vos conformeis com este mundo...” – Romanos 12:2"
-    ];
-    const indexHoje = new Date().getDate() % versiculos.length;
-    document.getElementById("versiculo").textContent = versiculos[indexHoje];
-
-    const mensagens = [
-      "Continue firme! Um dia de cada vez.",
-      "Você está vencendo a si mesmo!",
-      "Deus te dá forças para continuar.",
-      "A pureza é uma escolha diária.",
-      "Você é mais forte do que pensa.",
-      "Permanecer firme te aproxima de Deus."
-    ];
-    document.getElementById("mensagem").textContent = mensagens[Math.floor(Math.random() * mensagens.length)];
-
-    let visitas = localStorage.getItem("visitasTonyApp") || 0;
-    visitas = parseInt(visitas) + 1;
-    localStorage.setItem("visitasTonyApp", visitas);
-    document.getElementById("visitas").textContent = `Número de visitas neste navegador: ${visitas}`;
-  }
-
-  function atualizarEstatisticas(dias) {
-    const hoje = new Date();
-    const inicio = new Date(localStorage.getItem("inicioTonyApp") + "T00:00:00");
-    const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-    let diasNoMesLimpos = inicio <= primeiroDiaMes ? hoje.getDate() : Math.max(0, Math.floor((hoje - inicio) / (1000 * 60 * 60 * 24)) + 1);
-    document.getElementById("estatisticas").textContent =
-      `Você está limpo há ${dias} dias no total. Neste mês, são ${diasNoMesLimpos} dias limpos.`;
-  }
-
-  function compartilhar() {
-    const tempo = document.getElementById("tempo").textContent;
-    const msg = `Estou limpo há ${tempo} graças a Deus! #TonyApp`;
-    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`);
-  }
-
-  function resetar() {
-    if (confirm("Deseja recomeçar o contador?")) {
-      localStorage.removeItem("inicioTonyApp");
-      localStorage.removeItem("inicializadoTonyApp");
-      location.reload();
+    // Função para fechar os detalhes do comando
+    function closeCommandDetails() {
+      commandDetailsOverlay.classList.remove('show');
     }
-  }
 
-  // Início
-  if (localStorage.getItem("inicializadoTonyApp") === "sim") {
-    iniciarApp();
-  } else {
-    irPara(1);
-  }
-</script>
+    // Event listeners
+    commandsTabButton.addEventListener('click', showCommandsList);
+    closeDetailsButton.addEventListener('click', closeCommandDetails);
+    commandDetailsOverlay.addEventListener('click', function(event) {
+      if (event.target === this) {
+        closeCommandDetails();
+      }
+    });
 
+    commandTriggers.forEach(trigger => {
+      trigger.addEventListener('click', function() {
+        const commandName = this.getAttribute('data-command');
+        for (const category in botCommands) {
+          const selectedCommand = botCommands[category].find(cmd => cmd.name.toLowerCase() === `!${commandName}`);
+          if (selectedCommand) {
+            showCommandDetails(selectedCommand);
+            return;
+          }
+        }
+      });
+    });
+
+    // Fechar a lista de comandos se clicar fora dela
+    document.addEventListener('click', function(event) {
+      if (!commandsTabButton.contains(event.target) && !commandsListContainer.contains(event.target)) {
+        commandsListContainer.classList.remove('show');
+      }
+    });
+  </script>
 </body>
 </html>
