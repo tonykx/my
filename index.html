@@ -249,19 +249,17 @@
 <body>
   <h1>Comandos do Bot</h1>
   <div id="category-buttons">
-    </div>
+  </div>
 
   <div id="commands-container">
     </div>
 
 <script>
-  // O objeto botCommands agora será carregado dinamicamente
   let botCommands; 
 
   const categoryButtonsDiv = document.getElementById("category-buttons");
   const commandsContainerDiv = document.getElementById("commands-container");
 
-  // Função para gerar os botões de categoria e as seções de comandos
   function generateContent(data) {
     botCommands = data; // Atribui os dados carregados à variável global
 
@@ -282,6 +280,7 @@
       commandsSection.id = `${categorySlug}-commands`;
       commandsSection.setAttribute("role", "region");
       commandsSection.setAttribute("aria-labelledby", `${categorySlug}-title`);
+      commandsSection.setAttribute("aria-live", "polite"); // Adicionado para leitores de tela
 
       const title = document.createElement("h2");
       title.id = `${categorySlug}-title`;
@@ -324,11 +323,28 @@
       })
       .then(data => {
         generateContent(data); // Chama a função para gerar o conteúdo com os dados carregados
+        // Foca no primeiro botão de categoria após o carregamento inicial
+        const firstCategoryButton = document.querySelector(".category-btn");
+        if (firstCategoryButton) {
+          firstCategoryButton.focus();
+        }
       })
       .catch(error => {
         console.error('Houve um problema ao carregar os comandos:', error);
-        // Opcional: exiba uma mensagem de erro na página para o usuário
-        commandsContainerDiv.innerHTML = '<p style="color: red;">Não foi possível carregar os comandos. Tente novamente mais tarde.</p>';
+        // Exibe uma mensagem de erro estilizada na página
+        const errorMessageDiv = document.createElement('div');
+        errorMessageDiv.style.cssText = `
+          color: #FF6347; /* Tom de vermelho */
+          background-color: #280D17; /* Fundo escuro */
+          padding: 15px;
+          border-radius: 8px;
+          border: 1px solid #FF6347;
+          margin-top: 30px;
+          font-size: 1.1em;
+          text-align: center;
+        `;
+        errorMessageDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Ops! Não foi possível carregar os comandos. Por favor, tente novamente mais tarde.`;
+        commandsContainerDiv.appendChild(errorMessageDiv);
       });
   });
 
@@ -337,8 +353,16 @@
     const buttons = document.querySelectorAll(".category-btn");
     buttons.forEach(btn => {
         btn.classList.add("fade-out");
-        btn.setAttribute("aria-expanded", "false");
+        btn.setAttribute("aria-expanded", "false"); // Reseta todos para false
     });
+
+    // Define aria-expanded para true APENAS para o botão clicado
+    // Nota: O seletor está usando o `onclick` para encontrar o botão.
+    // Se você mudar para um `addEventListener`, precisará de uma forma diferente de identificar o botão clicado.
+    const clickedButton = document.querySelector(`[onclick="showCommands('${type}')"]`);
+    if (clickedButton) {
+        clickedButton.setAttribute("aria-expanded", "true");
+    }
 
     // Ajustado para 300ms, combinando com a duração da transição.
     setTimeout(() => {
@@ -354,8 +378,6 @@
       if (backButton) {
           backButton.focus();
       }
-      
-      document.querySelector(`[onclick="showCommands('${type}')"]`).setAttribute("aria-expanded", "true");
     }, 300); // TEMPO AJUSTADO AQUI!
   }
 
@@ -366,7 +388,7 @@
     const buttons = document.querySelectorAll(".category-btn");
     buttons.forEach(btn => {
         btn.classList.remove("fade-out");
-        btn.setAttribute("aria-expanded", "false");
+        btn.setAttribute("aria-expanded", "false"); // Todos os botões de categoria voltam a false
     });
     // Foca no primeiro botão de categoria ao voltar
     document.querySelector(".category-btn").focus();
