@@ -100,7 +100,7 @@
       linear-gradient(to bottom, rgba(0, 191, 255, 0.05) 1px, transparent 1px);
     background-size: 20px 20px; /* Tamanho da grade */
     opacity: 0.1; /* Opacidade bem baixa */
-    z-index: 0;
+    z-index: 0; /* Fica no fundo */
   }
 
   .commands-section h2 {
@@ -112,15 +112,15 @@
     text-transform: uppercase;
     letter-spacing: 1.5px;
     font-size: 2em;
-    position: relative; /* Para z-index com o ::before */
-    z-index: 1;
+    position: relative; /* Para z-index */
+    z-index: 1; /* Acima do fundo */
   }
 
   .commands-section ul {
     list-style: none;
     padding: 0;
-    position: relative; /* Para z-index com o ::before */
-    z-index: 1;
+    position: relative; /* Para z-index */
+    z-index: 1; /* Acima do fundo */
   }
 
   .commands-section li {
@@ -132,6 +132,8 @@
     transition: transform 0.2s ease-out, background-color 0.2s ease-out; /* Transição para hover */
     border-radius: 4px; /* Para o background do hover */
     padding: 10px; /* Para o background do hover */
+    position: relative; /* Para z-index */
+    z-index: 1; /* Acima do fundo */
   }
 
   .commands-section li:last-child {
@@ -198,6 +200,8 @@
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1px;
+    position: relative; /* Necessário para que o z-index funcione */
+    z-index: 2; /* Garante que ele esteja acima do fundo da grade */
   }
 
   .back-btn:hover {
@@ -344,9 +348,10 @@
 
       commandsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-      const firstInteractiveElement = commandsDiv.querySelector('button, a, input, [tabindex]');
-      if (firstInteractiveElement) {
-          firstInteractiveElement.focus();
+      // Move o foco para o botão de voltar quando a seção de comandos é exibida
+      const backButton = commandsDiv.querySelector('.back-btn');
+      if (backButton) {
+          backButton.focus();
       }
       
       document.querySelector(`[onclick="showCommands('${type}')"]`).setAttribute("aria-expanded", "true");
@@ -362,6 +367,7 @@
         btn.classList.remove("fade-out");
         btn.setAttribute("aria-expanded", "false");
     });
+    // Foca no primeiro botão de categoria ao voltar
     document.querySelector(".category-btn").focus();
   }
 </script>
