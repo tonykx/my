@@ -65,9 +65,11 @@
     box-shadow: 0 0 20px rgba(0, 191, 255, 0.8); /* Brilho mais intenso */
   }
 
+  /* Ajuste crucial para o "lag" percebido: TRANSITION MAIS CURTA */
   .category-btn.fade-out {
     opacity: 0;
-    transform: scale(0.8) translateY(-10px); /* Transição para desaparecer */
+    transform: scale(0.8) translateY(-10px);
+    transition: opacity 0.15s ease-out, transform 0.15s ease-out; /* REDUZIDO PARA 0.15s */
   }
 
   /* Seção de Comandos */
@@ -211,6 +213,31 @@
     box-shadow: 0 0 15px rgba(0, 191, 255, 0.6);
   }
 
+  /* Controle de Áudio */
+  #audio-control {
+    position: fixed; /* Fixa na tela */
+    top: 20px;       /* Distância do topo */
+    right: 20px;     /* Distância da direita */
+    font-size: 1.8em; /* Tamanho do ícone */
+    color: #00BFFF;  /* Cor ciano */
+    cursor: pointer; /* Indica que é clicável */
+    z-index: 1000;   /* Garante que fique acima de tudo */
+    transition: color 0.3s ease, transform 0.3s ease; /* Transição suave */
+    text-shadow: 0 0 10px rgba(0, 191, 255, 0.5); /* Brilho sutil */
+  }
+
+  #audio-control:hover {
+    color: #fff; /* Muda para branco no hover */
+    transform: scale(1.1); /* Leve aumento */
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.7); /* Brilho mais forte */
+  }
+
+  /* Ícone de áudio ativo */
+  #audio-control.active .fa-volume-up {
+    color: #32CD32; /* Verde limão quando ativo */
+    text-shadow: 0 0 15px rgba(50, 205, 50, 0.7);
+  }
+
   /* Media Queries para Responsividade em telas pequenas */
   @media (max-width: 768px) {
     h1 {
@@ -243,10 +270,23 @@
       padding: 10px 20px;
       font-size: 0.9em;
     }
+    #audio-control {
+      top: 10px;
+      right: 10px;
+      font-size: 1.5em;
+    }
   }
 </style>
 </head>
 <body>
+  <audio id="background-audio" loop>
+    <source src="audio_tecnologico.mp3" type="audio/mp3">
+    Seu navegador não suporta o elemento de áudio.
+  </audio>
+  <div id="audio-control">
+    <i class="fas fa-volume-mute"></i>
+  </div>
+
   <h1>Comandos do Bot</h1>
   <div id="category-buttons">
     </div>
@@ -330,8 +370,29 @@
         // Opcional: exiba uma mensagem de erro na página para o usuário
         commandsContainerDiv.innerHTML = '<p style="color: red;">Não foi possível carregar os comandos. Tente novamente mais tarde.</p>';
       });
-  });
 
+    // --- JavaScript para o Controle de Áudio ---
+    const audio = document.getElementById('background-audio');
+    const audioControl = document.getElementById('audio-control');
+    const audioIcon = audioControl.querySelector('i');
+
+    let isPlaying = false; // Estado inicial: áudio parado
+
+    audioControl.addEventListener('click', () => {
+        if (isPlaying) {
+            audio.pause();
+            audioIcon.classList.remove('fa-volume-up');
+            audioIcon.classList.add('fa-volume-mute');
+            audioControl.classList.remove('active'); // Remove a classe 'active'
+        } else {
+            audio.play().catch(e => console.error("Erro ao tentar reproduzir o áudio:", e));
+            audioIcon.classList.remove('fa-volume-mute');
+            audioIcon.classList.add('fa-volume-up');
+            audioControl.classList.add('active'); // Adiciona a classe 'active'
+        }
+        isPlaying = !isPlaying; // Inverte o estado
+    });
+  });
 
   function showCommands(type) {
     const buttons = document.querySelectorAll(".category-btn");
@@ -340,7 +401,7 @@
         btn.setAttribute("aria-expanded", "false");
     });
 
-    // Ajustado para 300ms, combinando com a duração da transição.
+    // AJUSTE CRUCIAL AQUI: O setTimeout agora é de 150ms para sincronizar com a nova transição do fade-out
     setTimeout(() => {
       document.getElementById("category-buttons").style.display = "none";
 
@@ -356,7 +417,7 @@
       }
       
       document.querySelector(`[onclick="showCommands('${type}')"]`).setAttribute("aria-expanded", "true");
-    }, 300); // TEMPO AJUSTADO AQUI!
+    }, **150**); // TEMPO AJUSTADO AQUI!
   }
 
   function backToCategories() {
