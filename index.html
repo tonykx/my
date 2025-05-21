@@ -340,6 +340,7 @@
         btn.setAttribute("aria-expanded", "false");
     });
 
+    // Ajustado para 300ms, combinando com a duração da transição.
     setTimeout(() => {
       document.getElementById("category-buttons").style.display = "none";
 
@@ -355,7 +356,7 @@
       }
       
       document.querySelector(`[onclick="showCommands('${type}')"]`).setAttribute("aria-expanded", "true");
-    }, 400); 
+    }, 300); // TEMPO AJUSTADO AQUI!
   }
 
   function backToCategories() {
