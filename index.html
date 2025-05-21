@@ -5,140 +5,232 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bot - Comandos</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-
 <style>
   body {
-    font-family: 'Roboto', sans-serif; /* Usando Roboto para o corpo */
+    font-family: sans-serif;
     background: #121212;
-    color: #e0e0e0; /* Cor do texto principal um pouco mais clara */
+    color: #fff;
     margin: 0;
     padding: 20px;
     text-align: center;
-    line-height: 1.6; /* Melhora a legibilidade do texto */
   }
   h1 {
-    font-family: 'Montserrat', sans-serif; /* Usando Montserrat para o título */
     color: #4fc3f7;
-    margin-bottom: 40px; /* Mais espaço abaixo do título principal */
-    font-size: 2.8em; /* Título maior */
-    text-shadow: 0 0 15px rgba(79, 195, 247, 0.4); /* Sombra suave no título */
   }
   .category-btn {
-    padding: 14px 25px; /* Padding um pouco maior */
-    margin: 15px; /* Mais margem entre os botões */
+    padding: 12px 20px;
+    margin: 10px;
     background: #1e88e5;
     border: none;
     color: white;
-    border-radius: 8px; /* Bordas mais arredondadas */
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 1.1em; /* Fonte um pouco maior */
-    font-weight: 600; /* Texto mais robusto */
-    transition: all 0.3s ease-out; /* Transição mais suave e abrangente */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra para elevação */
+    font-size: 1em;
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
   }
   .category-btn:hover {
-    background: #0d47a1; /* Azul mais escuro no hover */
-    transform: translateY(-3px) scale(1.02); /* Leve elevação e escala */
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4); /* Sombra maior no hover */
+    background: #0d47a1;
   }
   .category-btn.fade-out {
     opacity: 0;
     transform: scale(0.8);
   }
-  .commands-section {
+  .commands-section { /* Renomeado de .commands para evitar conflito com um id */
     display: none;
-    margin-top: 40px; /* Mais espaço acima da seção de comandos */
+    margin-top: 30px;
     text-align: left;
-    max-width: 750px; /* Ligeiramente mais largo */
+    max-width: 700px; /* Aumentado um pouco para acomodar descrições mais longas */
     margin-left: auto;
     margin-right: auto;
     background: #1a1a1a;
-    padding: 30px; /* Mais padding interno */
-    border-radius: 12px; /* Bordas mais arredondadas */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); /* Sombra mais pronunciada */
-    animation: fadeIn 0.5s ease-out forwards; /* Animação ao aparecer */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
   .commands-section h2 {
-    font-family: 'Montserrat', sans-serif;
-    color: #81d4fa; /* Azul claro para o título da seção */
-    margin-bottom: 25px;
+    color: #4fc3f7;
+    margin-bottom: 20px;
     border-bottom: 2px solid #333;
-    padding-bottom: 15px;
+    padding-bottom: 10px;
     text-align: center;
-    font-size: 2em;
-    text-shadow: 0 0 10px rgba(129, 212, 250, 0.3);
   }
   .commands-section ul {
     list-style: none;
     padding: 0;
   }
   .commands-section li {
-    margin-bottom: 20px; /* Mais espaço entre os itens da lista */
-    padding-bottom: 15px;
-    border-bottom: 1px dashed #333;
+    margin-bottom: 15px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed #333; /* Mudado para dashed para um visual diferente */
     display: flex;
     align-items: flex-start;
   }
   .commands-section li:last-child {
-    border-bottom: none;
+    border-bottom: none; /* Remove a borda do último item */
   }
   .commands-section .command-icon {
-    font-size: 1.5em; /* Ícone um pouco maior */
-    margin-right: 15px; /* Mais espaço entre ícone e texto */
-    color: #81d4fa;
-    flex-shrink: 0;
-    padding-top: 5px; /* Ajuste para centralizar verticalmente com o texto */
+    font-size: 1.2em;
+    margin-right: 10px;
+    color: #81d4fa; /* Cor dos ícones */
+    flex-shrink: 0; /* Impede que o ícone encolha */
+    padding-top: 2px; /* Ajuste vertical para o ícone */
   }
   .commands-section .command-details {
     flex-grow: 1;
   }
   .commands-section .command-name {
-    font-weight: 700; /* Nome do comando mais forte */
-    color: #f0f0f0; /* Um branco mais suave */
+    font-weight: bold;
+    color: #e0e0e0;
     margin-bottom: 5px;
-    display: block;
-    font-size: 1.15em; /* Nome do comando um pouco maior */
+    display: block; /* Garante que o nome ocupe sua própria linha antes da descrição */
   }
   .commands-section .command-description {
-    font-size: 0.98em;
-    color: #b0b0b0; /* Cor da descrição mais suave */
+    font-size: 0.95em;
+    color: #bbb;
     margin-bottom: 5px;
   }
   .commands-section .command-usage {
-    font-size: 0.88em;
+    font-size: 0.85em;
     color: #999;
     font-style: italic;
-    background: #282828; /* Fundo sutil para o uso */
-    padding: 5px 8px;
-    border-radius: 4px;
-    display: inline-block; /* Para o fundo ocupar apenas o texto */
-    margin-top: 5px;
   }
   .back-btn {
-    margin-top: 30px; /* Mais espaço acima do botão voltar */
+    margin-top: 20px;
     background: #444;
     border: none;
-    padding: 12px 25px;
+    padding: 10px 20px;
     color: white;
-    border-radius: 6px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
-    font-size: 1em;
-    font-weight: 500;
+    transition: background 0.3s ease;
   }
   .back-btn:hover {
     background: #666;
-    transform: translateY(-2px);
   }
 </style>
 </head>
 <body>
-  </body>
+  <h1>Comandos do Bot</h1>
+  <div id="category-buttons">
+    </div>
+
+  <div id="commands-container">
+    </div>
+
+<script>
+  // O objeto botCommands agora será carregado dinamicamente
+  let botCommands; 
+
+  const categoryButtonsDiv = document.getElementById("category-buttons");
+  const commandsContainerDiv = document.getElementById("commands-container");
+
+  // Função para gerar os botões de categoria e as seções de comandos
+  function generateContent(data) {
+    botCommands = data; // Atribui os dados carregados à variável global
+
+    for (const category in botCommands) {
+      // Cria o botão de categoria
+      const categoryBtn = document.createElement("button");
+      const categorySlug = category.replace(/\s+/g, '-').toLowerCase();
+      categoryBtn.className = "category-btn";
+      categoryBtn.textContent = category;
+      categoryBtn.setAttribute("onclick", `showCommands('${categorySlug}')`);
+      categoryBtn.setAttribute("aria-expanded", "false");
+      categoryBtn.setAttribute("aria-controls", `${categorySlug}-commands`);
+      categoryButtonsDiv.appendChild(categoryBtn);
+
+      // Cria a seção de comandos para a categoria
+      const commandsSection = document.createElement("div");
+      commandsSection.className = "commands-section";
+      commandsSection.id = `${categorySlug}-commands`;
+      commandsSection.setAttribute("role", "region");
+      commandsSection.setAttribute("aria-labelledby", `${categorySlug}-title`);
+
+      const title = document.createElement("h2");
+      title.id = `${categorySlug}-title`;
+      title.textContent = `Comandos de ${category}`;
+      commandsSection.appendChild(title);
+
+      const ul = document.createElement("ul");
+      botCommands[category].forEach(command => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <i class="${command.icon} command-icon"></i>
+          <div class="command-details">
+            <span class="command-name">${command.name}</span>
+            <p class="command-description">${command.description}</p>
+            ${command.usage ? `<p class="command-usage">Uso: ${command.usage}</p>` : ''}
+          </div>
+        `;
+        ul.appendChild(li);
+      });
+      commandsSection.appendChild(ul);
+
+      const backBtn = document.createElement("button");
+      backBtn.className = "back-btn";
+      backBtn.textContent = "Voltar";
+      backBtn.setAttribute("onclick", "backToCategories()");
+      commandsSection.appendChild(backBtn);
+
+      commandsContainerDiv.appendChild(commandsSection);
+    }
+  }
+
+  // Carrega os dados do arquivo JSON
+  document.addEventListener("DOMContentLoaded", () => {
+    fetch('commands.json') // O caminho para o seu arquivo JSON
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        generateContent(data); // Chama a função para gerar o conteúdo com os dados carregados
+      })
+      .catch(error => {
+        console.error('Houve um problema ao carregar os comandos:', error);
+        // Opcional: exiba uma mensagem de erro na página para o usuário
+        commandsContainerDiv.innerHTML = '<p style="color: red;">Não foi possível carregar os comandos. Tente novamente mais tarde.</p>';
+      });
+  });
+
+
+  function showCommands(type) {
+    const buttons = document.querySelectorAll(".category-btn");
+    buttons.forEach(btn => {
+        btn.classList.add("fade-out");
+        btn.setAttribute("aria-expanded", "false");
+    });
+
+    setTimeout(() => {
+      document.getElementById("category-buttons").style.display = "none";
+
+      const commandsDiv = document.getElementById(`${type}-commands`);
+      commandsDiv.style.display = "block";
+
+      commandsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      const firstInteractiveElement = commandsDiv.querySelector('button, a, input, [tabindex]');
+      if (firstInteractiveElement) {
+          firstInteractiveElement.focus();
+      }
+      
+      document.querySelector(`[onclick="showCommands('${type}')"]`).setAttribute("aria-expanded", "true");
+    }, 400); 
+  }
+
+  function backToCategories() {
+    document.querySelectorAll(".commands-section").forEach(cmd => cmd.style.display = "none");
+    document.getElementById("category-buttons").style.display = "block";
+
+    const buttons = document.querySelectorAll(".category-btn");
+    buttons.forEach(btn => {
+        btn.classList.remove("fade-out");
+        btn.setAttribute("aria-expanded", "false");
+    });
+    document.querySelector(".category-btn").focus();
+  }
+</script>
+</body>
 </html>
