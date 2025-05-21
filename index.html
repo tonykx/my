@@ -134,6 +134,11 @@
     padding: 10px; /* Para o background do hover */
     position: relative; /* Para z-index */
     z-index: 1; /* Acima do fundo */
+
+    /* Estilos para a animação de entrada */
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInSlideUp 0.5s ease-out forwards; /* Animação padrão, será sobrescrita pelo JS */
   }
 
   .commands-section li:last-child {
@@ -143,6 +148,18 @@
   .commands-section li:hover {
     background-color: rgba(0, 191, 255, 0.05); /* Fundo sutil no hover */
     transform: translateX(5px); /* Leve movimento para a direita */
+  }
+
+  /* Animação para os itens da lista */
+  @keyframes fadeInSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .commands-section .command-icon {
@@ -357,19 +374,23 @@
     });
 
     // Define aria-expanded para true APENAS para o botão clicado
-    // Nota: O seletor está usando o `onclick` para encontrar o botão.
-    // Se você mudar para um `addEventListener`, precisará de uma forma diferente de identificar o botão clicado.
     const clickedButton = document.querySelector(`[onclick="showCommands('${type}')"]`);
     if (clickedButton) {
         clickedButton.setAttribute("aria-expanded", "true");
     }
 
-    // Ajustado para 300ms, combinando com a duração da transição.
     setTimeout(() => {
       document.getElementById("category-buttons").style.display = "none";
 
       const commandsDiv = document.getElementById(`${type}-commands`);
       commandsDiv.style.display = "block";
+
+      // Animação de entrada para os itens da lista
+      const commandItems = commandsDiv.querySelectorAll('li');
+      commandItems.forEach((item, index) => {
+        item.style.animationDelay = `${index * 0.08}s`; /* Atraso escalonado */
+        item.style.animationName = 'fadeInSlideUp'; /* Ativa a animação */
+      });
 
       commandsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
@@ -382,7 +403,17 @@
   }
 
   function backToCategories() {
-    document.querySelectorAll(".commands-section").forEach(cmd => cmd.style.display = "none");
+    document.querySelectorAll(".commands-section").forEach(cmd => {
+      // Limpa as propriedades de animação para resetar
+      cmd.querySelectorAll('li').forEach(item => {
+        item.style.animationDelay = '';
+        item.style.animationName = '';
+        item.style.opacity = '0'; // Garante que fiquem invisíveis para a próxima animação
+        item.style.transform = 'translateY(20px)';
+      });
+      cmd.style.display = "none";
+    });
+    
     document.getElementById("category-buttons").style.display = "block";
 
     const buttons = document.querySelectorAll(".category-btn");
