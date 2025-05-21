@@ -6,106 +6,239 @@
 <title>Bot - Comandos</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
+  /* Estilos Gerais - O que é aplicado em tudo */
   body {
-    font-family: sans-serif;
-    background: #121212;
-    color: #fff;
+    font-family: 'Segoe UI', 'Roboto Mono', monospace, sans-serif; /* Fontes mais modernas e com estilo de código */
+    background: #0D1117; /* Um azul escuro quase preto, comum em temas de código */
+    color: #E0E0E0; /* Texto claro para contraste */
     margin: 0;
     padding: 20px;
     text-align: center;
+    overflow-x: hidden; /* Evita barras de rolagem horizontais */
+    /* Adiciona um gradiente sutil de fundo para profundidade */
+    background: linear-gradient(135deg, #0D1117 0%, #171A21 100%);
   }
+
+  /* Título Principal */
   h1 {
-    color: #4fc3f7;
+    color: #00BFFF; /* Ciano vibrante para um toque "cyber" */
+    text-shadow: 0 0 15px rgba(0, 191, 255, 0.6); /* Brilho neon */
+    letter-spacing: 2px; /* Espaçamento entre letras */
+    text-transform: uppercase; /* Deixa em maiúsculas */
+    font-size: 2.8em;
+    margin-bottom: 40px;
+    position: relative;
+    animation: pulseGlow 2s infinite alternate; /* Animação de pulso */
   }
+
+  /* Animação para o título */
+  @keyframes pulseGlow {
+    from {
+      text-shadow: 0 0 10px rgba(0, 191, 255, 0.4), 0 0 20px rgba(0, 191, 255, 0.2);
+    }
+    to {
+      text-shadow: 0 0 20px rgba(0, 191, 255, 0.8), 0 0 30px rgba(0, 191, 255, 0.5);
+    }
+  }
+
+  /* Botões de Categoria */
   .category-btn {
-    padding: 12px 20px;
-    margin: 10px;
-    background: #1e88e5;
-    border: none;
-    color: white;
-    border-radius: 5px;
+    padding: 15px 30px;
+    margin: 15px;
+    background: #283747; /* Azul acinzentado escuro */
+    border: 1px solid #00BFFF; /* Borda ciano */
+    color: #E0E0E0;
+    border-radius: 8px; /* Cantos levemente arredondados */
     cursor: pointer;
-    font-size: 1em;
-    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: all 0.3s ease-out; /* Transição para todas as propriedades */
+    box-shadow: 0 0 10px rgba(0, 191, 255, 0.3); /* Sombra com brilho */
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
+
   .category-btn:hover {
-    background: #0d47a1;
+    background: #00BFFF; /* Fundo ciano no hover */
+    color: #0D1117; /* Texto escuro no hover */
+    transform: translateY(-3px) scale(1.02); /* Leve levantamento e aumento */
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.8); /* Brilho mais intenso */
   }
+
   .category-btn.fade-out {
     opacity: 0;
-    transform: scale(0.8);
+    transform: scale(0.8) translateY(-10px); /* Transição para desaparecer */
   }
-  .commands-section { /* Renomeado de .commands para evitar conflito com um id */
+
+  /* Seção de Comandos */
+  .commands-section {
     display: none;
-    margin-top: 30px;
+    margin-top: 40px;
     text-align: left;
-    max-width: 700px; /* Aumentado um pouco para acomodar descrições mais longas */
+    max-width: 800px; /* Aumentado para mais espaço */
     margin-left: auto;
     margin-right: auto;
-    background: #1a1a1a;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: #1C242E; /* Um tom de azul mais escuro para o painel */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(0, 191, 255, 0.2), inset 0 0 10px rgba(0, 191, 255, 0.1); /* Brilho e sombra interna */
+    border: 1px solid #00BFFF; /* Borda sutil de ciano */
+    position: relative;
+    overflow: hidden; /* Para garantir que pseudoelementos não vazem */
   }
+
+  /* Detalhe de fundo na seção de comandos (opcional, para um toque "grid") */
+  .commands-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+      linear-gradient(to right, rgba(0, 191, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 191, 255, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px; /* Tamanho da grade */
+    opacity: 0.1; /* Opacidade bem baixa */
+    z-index: 0;
+  }
+
   .commands-section h2 {
-    color: #4fc3f7;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #333;
-    padding-bottom: 10px;
+    color: #00BFFF;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #00BFFF; /* Borda ciano */
+    padding-bottom: 12px;
     text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 2em;
+    position: relative; /* Para z-index com o ::before */
+    z-index: 1;
   }
+
   .commands-section ul {
     list-style: none;
     padding: 0;
+    position: relative; /* Para z-index com o ::before */
+    z-index: 1;
   }
+
   .commands-section li {
-    margin-bottom: 15px;
-    padding-bottom: 12px;
-    border-bottom: 1px dashed #333; /* Mudado para dashed para um visual diferente */
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed rgba(0, 191, 255, 0.3); /* Linha tracejada com ciano */
     display: flex;
     align-items: flex-start;
+    transition: transform 0.2s ease-out, background-color 0.2s ease-out; /* Transição para hover */
+    border-radius: 4px; /* Para o background do hover */
+    padding: 10px; /* Para o background do hover */
   }
+
   .commands-section li:last-child {
-    border-bottom: none; /* Remove a borda do último item */
+    border-bottom: none;
   }
+
+  .commands-section li:hover {
+    background-color: rgba(0, 191, 255, 0.05); /* Fundo sutil no hover */
+    transform: translateX(5px); /* Leve movimento para a direita */
+  }
+
   .commands-section .command-icon {
-    font-size: 1.2em;
-    margin-right: 10px;
-    color: #81d4fa; /* Cor dos ícones */
-    flex-shrink: 0; /* Impede que o ícone encolha */
-    padding-top: 2px; /* Ajuste vertical para o ícone */
+    font-size: 1.5em; /* Ícones maiores */
+    margin-right: 15px;
+    color: #00BFFF; /* Ciano para os ícones */
+    flex-shrink: 0;
+    padding-top: 3px;
+    text-shadow: 0 0 8px rgba(0, 191, 255, 0.7); /* Brilho nos ícones */
   }
+
   .commands-section .command-details {
     flex-grow: 1;
   }
+
   .commands-section .command-name {
     font-weight: bold;
-    color: #e0e0e0;
-    margin-bottom: 5px;
-    display: block; /* Garante que o nome ocupe sua própria linha antes da descrição */
+    color: #E0E0E0;
+    margin-bottom: 8px;
+    display: block;
+    font-size: 1.15em;
+    text-transform: capitalize; /* Mantém a primeira letra maiúscula */
+    letter-spacing: 0.5px;
   }
+
   .commands-section .command-description {
     font-size: 0.95em;
-    color: #bbb;
-    margin-bottom: 5px;
+    color: #B0B0B0;
+    margin-bottom: 8px;
+    line-height: 1.4; /* Espaçamento entre linhas */
   }
+
   .commands-section .command-usage {
     font-size: 0.85em;
-    color: #999;
+    color: #8899AA; /* Um cinza azulado para uso */
     font-style: italic;
+    font-family: 'Roboto Mono', monospace; /* Fonte monoespaçada para uso */
+    background-color: rgba(0, 0, 0, 0.2); /* Fundo sutil para o uso */
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block; /* Para o fundo ocupar apenas o texto */
   }
+
+  /* Botão de Voltar */
   .back-btn {
-    margin-top: 20px;
-    background: #444;
-    border: none;
-    padding: 10px 20px;
-    color: white;
-    border-radius: 5px;
+    margin-top: 30px;
+    background: #283747; /* O mesmo azul acinzentado dos botões de categoria */
+    border: 1px solid #00BFFF;
+    padding: 12px 25px;
+    color: #E0E0E0;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: all 0.3s ease;
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
+
   .back-btn:hover {
-    background: #666;
+    background: #00BFFF;
+    color: #0D1117;
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(0, 191, 255, 0.6);
+  }
+
+  /* Media Queries para Responsividade em telas pequenas */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2em;
+      margin-bottom: 30px;
+    }
+    .category-btn {
+      padding: 10px 20px;
+      margin: 8px;
+      font-size: 0.9em;
+    }
+    .commands-section {
+      padding: 20px;
+      margin-top: 25px;
+    }
+    .commands-section h2 {
+      font-size: 1.5em;
+    }
+    .commands-section .command-icon {
+      font-size: 1.3em;
+      margin-right: 10px;
+    }
+    .commands-section .command-name {
+      font-size: 1.05em;
+    }
+    .commands-section .command-description {
+      font-size: 0.9em;
+    }
+    .back-btn {
+      padding: 10px 20px;
+      font-size: 0.9em;
+    }
   }
 </style>
 </head>
