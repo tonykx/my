@@ -134,11 +134,6 @@
     padding: 10px; /* Para o background do hover */
     position: relative; /* Para z-index */
     z-index: 1; /* Acima do fundo */
-
-    /* Estilos para a animação de entrada */
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInSlideUp 0.5s ease-out forwards; /* Animação padrão, será sobrescrita pelo JS */
   }
 
   .commands-section li:last-child {
@@ -148,18 +143,6 @@
   .commands-section li:hover {
     background-color: rgba(0, 191, 255, 0.05); /* Fundo sutil no hover */
     transform: translateX(5px); /* Leve movimento para a direita */
-  }
-
-  /* Animação para os itens da lista */
-  @keyframes fadeInSlideUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
   }
 
   .commands-section .command-icon {
@@ -266,17 +249,19 @@
 <body>
   <h1>Comandos do Bot</h1>
   <div id="category-buttons">
-  </div>
+    </div>
 
   <div id="commands-container">
     </div>
 
 <script>
+  // O objeto botCommands agora será carregado dinamicamente
   let botCommands; 
 
   const categoryButtonsDiv = document.getElementById("category-buttons");
   const commandsContainerDiv = document.getElementById("commands-container");
 
+  // Função para gerar os botões de categoria e as seções de comandos
   function generateContent(data) {
     botCommands = data; // Atribui os dados carregados à variável global
 
@@ -297,7 +282,6 @@
       commandsSection.id = `${categorySlug}-commands`;
       commandsSection.setAttribute("role", "region");
       commandsSection.setAttribute("aria-labelledby", `${categorySlug}-title`);
-      commandsSection.setAttribute("aria-live", "polite"); // Adicionado para leitores de tela
 
       const title = document.createElement("h2");
       title.id = `${categorySlug}-title`;
@@ -340,28 +324,11 @@
       })
       .then(data => {
         generateContent(data); // Chama a função para gerar o conteúdo com os dados carregados
-        // Foca no primeiro botão de categoria após o carregamento inicial
-        const firstCategoryButton = document.querySelector(".category-btn");
-        if (firstCategoryButton) {
-          firstCategoryButton.focus();
-        }
       })
       .catch(error => {
         console.error('Houve um problema ao carregar os comandos:', error);
-        // Exibe uma mensagem de erro estilizada na página
-        const errorMessageDiv = document.createElement('div');
-        errorMessageDiv.style.cssText = `
-          color: #FF6347; /* Tom de vermelho */
-          background-color: #280D17; /* Fundo escuro */
-          padding: 15px;
-          border-radius: 8px;
-          border: 1px solid #FF6347;
-          margin-top: 30px;
-          font-size: 1.1em;
-          text-align: center;
-        `;
-        errorMessageDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Ops! Não foi possível carregar os comandos. Por favor, tente novamente mais tarde.`;
-        commandsContainerDiv.appendChild(errorMessageDiv);
+        // Opcional: exiba uma mensagem de erro na página para o usuário
+        commandsContainerDiv.innerHTML = '<p style="color: red;">Não foi possível carregar os comandos. Tente novamente mais tarde.</p>';
       });
   });
 
@@ -370,27 +337,15 @@
     const buttons = document.querySelectorAll(".category-btn");
     buttons.forEach(btn => {
         btn.classList.add("fade-out");
-        btn.setAttribute("aria-expanded", "false"); // Reseta todos para false
+        btn.setAttribute("aria-expanded", "false");
     });
 
-    // Define aria-expanded para true APENAS para o botão clicado
-    const clickedButton = document.querySelector(`[onclick="showCommands('${type}')"]`);
-    if (clickedButton) {
-        clickedButton.setAttribute("aria-expanded", "true");
-    }
-
+    // Ajustado para 300ms, combinando com a duração da transição.
     setTimeout(() => {
       document.getElementById("category-buttons").style.display = "none";
 
       const commandsDiv = document.getElementById(`${type}-commands`);
       commandsDiv.style.display = "block";
-
-      // Animação de entrada para os itens da lista
-      const commandItems = commandsDiv.querySelectorAll('li');
-      commandItems.forEach((item, index) => {
-        item.style.animationDelay = `${index * 0.08}s`; /* Atraso escalonado */
-        item.style.animationName = 'fadeInSlideUp'; /* Ativa a animação */
-      });
 
       commandsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
@@ -399,27 +354,19 @@
       if (backButton) {
           backButton.focus();
       }
+      
+      document.querySelector(`[onclick="showCommands('${type}')"]`).setAttribute("aria-expanded", "true");
     }, 300); // TEMPO AJUSTADO AQUI!
   }
 
   function backToCategories() {
-    document.querySelectorAll(".commands-section").forEach(cmd => {
-      // Limpa as propriedades de animação para resetar
-      cmd.querySelectorAll('li').forEach(item => {
-        item.style.animationDelay = '';
-        item.style.animationName = '';
-        item.style.opacity = '0'; // Garante que fiquem invisíveis para a próxima animação
-        item.style.transform = 'translateY(20px)';
-      });
-      cmd.style.display = "none";
-    });
-    
+    document.querySelectorAll(".commands-section").forEach(cmd => cmd.style.display = "none");
     document.getElementById("category-buttons").style.display = "block";
 
     const buttons = document.querySelectorAll(".category-btn");
     buttons.forEach(btn => {
         btn.classList.remove("fade-out");
-        btn.setAttribute("aria-expanded", "false"); // Todos os botões de categoria voltam a false
+        btn.setAttribute("aria-expanded", "false");
     });
     // Foca no primeiro botão de categoria ao voltar
     document.querySelector(".category-btn").focus();

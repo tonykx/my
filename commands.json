@@ -110,7 +110,7 @@
     },
     {
       "name": "!grupo",
-      "description": "Fecha/abre o grupo: !grupo f (só ADMs enviam), !grupo a (todos enviam).",
+      "description": "Fecha/abre o grupo.",
       "usage": "!grupo f / !grupo a",
       "icon": "fas fa-lock"
     },
@@ -219,12 +219,6 @@
       "icon": "fas fa-book"
     },
     {
-      "name": "!contardias",
-      "description": "Calcula o número de dias até determinada data.",
-      "usage": "!contardias [data]",
-      "icon": "fas fa-calendar-alt"
-    },
-    {
       "name": "!placa2",
       "description": "Cria uma imagem de placa com nome personalizado.",
       "usage": "!placa2 [nome]",
@@ -245,7 +239,7 @@
     {
       "name": "!listddd",
       "description": "Mostra a lista de DDDs presentes no grupo.",
-      "usage": "!listddd",
+      "usage": "!listddd 79",
       "icon": "fas fa-list-ol"
     },
     {
@@ -443,42 +437,6 @@
       "description": "Baixa vídeos do iFunny. Use !ifunny [link].",
       "usage": "!ifunny [link do iFunny]",
       "icon": "fas fa-smile"
-    },
-    {
-      "name": "!play2",
-      "description": "Baixa músicas do YouTube (fonte alternativa 2).",
-      "usage": "!play2 [nome ou link]",
-      "icon": "fas fa-play"
-    },
-    {
-      "name": "!play3",
-      "description": "Baixa músicas do YouTube (fonte alternativa 3).",
-      "usage": "!play3 [nome ou link]",
-      "icon": "fas fa-play"
-    },
-    {
-      "name": "!play_vid",
-      "description": "Baixa vídeos diretamente do YouTube por link.",
-      "usage": "!play_vid [link do vídeo]",
-      "icon": "fas fa-video"
-    },
-    {
-      "name": "!play2",
-      "description": "Baixa músicas do YouTube (fonte alternativa 2).",
-      "usage": "!play2 [nome ou link]",
-      "icon": "fas fa-play"
-    },
-    {
-      "name": "!play3",
-      "description": "Baixa músicas do YouTube (fonte alternativa 3).",
-      "usage": "!play3 [nome ou link]",
-      "icon": "fas fa-play"
-    },
-    {
-      "name": "!play_vid",
-      "description": "Baixa vídeos diretamente do YouTube por link.",
-      "usage": "!play_vid [link do vídeo]",
-      "icon": "fas fa-video"
     }
   ]
 }
