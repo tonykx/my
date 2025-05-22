@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bot - Comandos</title>
+<meta name="description" content="Lista interativa dos comandos do bot.">
+<meta name="author" content="Seu Nome">
+<meta property="og:title" content="Comandos do Bot">
+<meta property="og:description" content="Visualize e explore todos os comandos do seu bot com categorias e instruções.">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
   /* Estilos Gerais - O que é aplicado em tudo */
@@ -265,6 +270,7 @@
 </head>
 <body>
   <h1>Comandos do Bot</h1>
+  <div id="loading-message" style="color: #00BFFF; font-size: 1.2em; text-align:center;">Carregando comandos...</div>
   <div id="category-buttons">
   </div>
 
@@ -288,6 +294,8 @@
       categoryBtn.textContent = category;
       categoryBtn.setAttribute("onclick", `showCommands('${categorySlug}')`);
       categoryBtn.setAttribute("aria-expanded", "false");
+      categoryBtn.setAttribute("role", "button");
+      categoryBtn.setAttribute("tabindex", "0");
       categoryBtn.setAttribute("aria-controls", `${categorySlug}-commands`);
       categoryButtonsDiv.appendChild(categoryBtn);
 
@@ -305,7 +313,12 @@
       commandsSection.appendChild(title);
 
       const ul = document.createElement("ul");
-      botCommands[category].forEach(command => {
+      
+      if (botCommands[category].length === 0) {
+        ul.innerHTML = '<li style="color:#ccc; font-style:italic;">Nenhum comando disponível nesta categoria.</li>';
+      } else {
+        botCommands[category].forEach(command => {
+  
         const li = document.createElement("li");
         li.innerHTML = `
           <i class="${command.icon} command-icon"></i>
@@ -315,14 +328,17 @@
             ${command.usage ? `<p class="command-usage">Uso: ${command.usage}</p>` : ''}
           </div>
         `;
-        ul.appendChild(li);
-      });
+                ul.appendChild(li);
+            });
+      }
       commandsSection.appendChild(ul);
 
       const backBtn = document.createElement("button");
       backBtn.className = "back-btn";
       backBtn.textContent = "Voltar";
       backBtn.setAttribute("onclick", "backToCategories()");
+      backBtn.setAttribute("role", "button");
+      backBtn.setAttribute("tabindex", "0");
       commandsSection.appendChild(backBtn);
 
       commandsContainerDiv.appendChild(commandsSection);
@@ -362,8 +378,48 @@
         `;
         errorMessageDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Ops! Não foi possível carregar os comandos. Por favor, tente novamente mais tarde.`;
         commandsContainerDiv.appendChild(errorMessageDiv);
-      });
-  });
+            });
+      }
+        });
+      }
+
+
+  
+// Salva e recupera última categoria acessada
+const ultimaCategoria = localStorage.getItem("ultimaCategoria");
+if (ultimaCategoria && document.getElementById(ultimaCategoria + "-commands")) {
+  showCommands(ultimaCategoria);
+}
+
+// Atualiza localStorage ao clicar em categoria
+function showCommands(type) {
+  localStorage.setItem("ultimaCategoria", type);
+  const buttons = document.querySelectorAll(".category-btn");
+  buttons.forEach(btn => {
+      btn.classList.add("fade-out");
+      btn.setAttribute("aria-expanded", "false");
+        });
+      }
+
+  const clickedButton = document.querySelector(`[onclick="showCommands('${type}')"]`);
+  if (clickedButton) clickedButton.setAttribute("aria-expanded", "true");
+
+  setTimeout(() => {
+    document.getElementById("category-buttons").style.display = "none";
+    const commandsDiv = document.getElementById(`${type}-commands`);
+    commandsDiv.style.display = "block";
+    const commandItems = commandsDiv.querySelectorAll('li');
+    commandItems.forEach((item, index) => {
+      item.style.animationDelay = `${index * 0.08}s`;
+      item.style.animationName = 'fadeInSlideUp';
+          });
+      }
+    commandsDiv.scrollIntoView({ behavior: 'smooth', block: 'start'       });
+      }
+    const backButton = commandsDiv.querySelector('.back-btn');
+    if (backButton) backButton.focus();
+  }, 300);
+}
 
 
   function showCommands(type) {
@@ -371,7 +427,8 @@
     buttons.forEach(btn => {
         btn.classList.add("fade-out");
         btn.setAttribute("aria-expanded", "false"); // Reseta todos para false
-    });
+          });
+      }
 
     // Define aria-expanded para true APENAS para o botão clicado
     const clickedButton = document.querySelector(`[onclick="showCommands('${type}')"]`);
@@ -390,9 +447,11 @@
       commandItems.forEach((item, index) => {
         item.style.animationDelay = `${index * 0.08}s`; /* Atraso escalonado */
         item.style.animationName = 'fadeInSlideUp'; /* Ativa a animação */
-      });
+            });
+      }
 
-      commandsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      commandsDiv.scrollIntoView({ behavior: 'smooth', block: 'start'       });
+      }
 
       // Move o foco para o botão de voltar quando a seção de comandos é exibida
       const backButton = commandsDiv.querySelector('.back-btn');
@@ -410,9 +469,11 @@
         item.style.animationName = '';
         item.style.opacity = '0'; // Garante que fiquem invisíveis para a próxima animação
         item.style.transform = 'translateY(20px)';
-      });
+            });
+      }
       cmd.style.display = "none";
-    });
+          });
+      }
     
     document.getElementById("category-buttons").style.display = "block";
 
@@ -420,7 +481,8 @@
     buttons.forEach(btn => {
         btn.classList.remove("fade-out");
         btn.setAttribute("aria-expanded", "false"); // Todos os botões de categoria voltam a false
-    });
+          });
+      }
     // Foca no primeiro botão de categoria ao voltar
     document.querySelector(".category-btn").focus();
   }
