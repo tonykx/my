@@ -1,0 +1,106 @@
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(180deg, #2a004f, #1c0033);
+  color: #f0f0f0;
+  padding: 20px;
+  text-align: center;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+}
+
+h1 {
+  color: #ffffff;
+  font-size: 2.5em;
+  margin-bottom: 30px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.category-btn {
+  background: #4b0082;
+  color: #fff;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 12px;
+  margin: 10px;
+  font-weight: bold;
+  font-size: 1em;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+  transition: 0.3s;
+}
+
+.category-btn:hover {
+  background: #6a0dad;
+  box-shadow: 0 0 15px rgba(186, 85, 211, 0.8);
+}
+
+.commands-section {
+  background: #290045;
+  padding: 20px;
+  border-radius: 16px;
+  margin-top: 30px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.commands-section h2 {
+  color: #dda0dd;
+  margin-bottom: 20px;
+}
+
+.commands-section ul {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+.commands-section li {
+  background: #3d006b;
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 10px;
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  box-shadow: 0 0 10px rgba(147, 112, 219, 0.2);
+}
+
+.command-icon {
+  font-size: 1.8em;
+  color: #ba55d3;
+}
+
+.command-name {
+  font-weight: bold;
+  color: #fff;
+}
+
+.command-description {
+  color: #dcdcdc;
+  margin: 5px 0;
+}
+
+.command-usage {
+  font-size: 0.85em;
+  font-style: italic;
+  color: #ccc;
+}
+
+.back-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #4b0082;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.back-btn:hover {
+  background: #6a0dad;
+}
