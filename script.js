@@ -12,60 +12,62 @@ function generateContent(data) {
     const categorySlug = category.replace(/\s+/g, '-').toLowerCase();
     categoryBtn.className = "category-btn";
     categoryBtn.textContent = category;
-    categoryBtn.setAttribute("onclick", `showCommands('${categorySlug}')`);
+    categoryBtn.onclick = () => showCommands(categorySlug);
     categoryButtonsDiv.appendChild(categoryBtn);
 
-    const commandsSection = document.createElement("div");
-    commandsSection.className = "commands-section";
-    commandsSection.id = `${categorySlug}-commands`;
+    const section = document.createElement("div");
+    section.className = "commands-section";
+    section.id = `${categorySlug}-commands`;
 
     const title = document.createElement("h2");
     title.textContent = `Comandos de ${category}`;
-    commandsSection.appendChild(title);
+    section.appendChild(title);
 
-    const ul = document.createElement("ul");
-    botCommands[category].forEach(command => {
-      const li = document.createElement("li");
-      li.innerHTML = `
-        <i class="${command.icon} command-icon"></i>
-        <div>
-          <span class="command-name">${command.name}</span>
-          <p class="command-description">${command.description}</p>
-          ${command.usage ? `<p class="command-usage">Uso: ${command.usage}</p>` : ''}
-        </div>
+    const list = document.createElement("ul");
+    list.className = "commands-list";
+
+    botCommands[category].forEach(cmd => {
+      const card = document.createElement("li");
+      card.className = "command-card";
+      card.innerHTML = `
+        <div class="command-icon"><i class="${cmd.icon}"></i></div>
+        <div class="command-name">${cmd.name}</div>
+        <div class="command-description">${cmd.description}</div>
+        ${cmd.usage ? `<div class="command-usage">Uso: ${cmd.usage}</div>` : ''}
       `;
-      ul.appendChild(li);
+      list.appendChild(card);
     });
-    commandsSection.appendChild(ul);
 
-    const backBtn = document.createElement("button");
-    backBtn.className = "back-btn";
-    backBtn.textContent = "Voltar";
-    backBtn.setAttribute("onclick", "backToCategories()");
-    commandsSection.appendChild(backBtn);
+    section.appendChild(list);
 
-    commandsContainerDiv.appendChild(commandsSection);
+    const back = document.createElement("button");
+    back.className = "back-btn";
+    back.textContent = "Voltar";
+    back.onclick = backToCategories;
+    section.appendChild(back);
+
+    commandsContainerDiv.appendChild(section);
   }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   fetch('commands.json')
-    .then(response => response.json())
-    .then(data => generateContent(data))
-    .catch(error => {
+    .then(r => r.json())
+    .then(generateContent)
+    .catch(e => {
+      console.error("Erro ao carregar comandos:", e);
       commandsContainerDiv.innerHTML = "<p>Erro ao carregar comandos.</p>";
-      console.error(error);
     });
 });
 
-function showCommands(type) {
+function showCommands(slug) {
   document.getElementById("category-buttons").style.display = "none";
-  document.querySelectorAll(".commands-section").forEach(div => div.style.display = "none");
-  const commandsDiv = document.getElementById(`${type}-commands`);
-  if (commandsDiv) commandsDiv.style.display = "block";
+  document.querySelectorAll(".commands-section").forEach(el => el.style.display = "none");
+  const section = document.getElementById(`${slug}-commands`);
+  if (section) section.style.display = "block";
 }
 
 function backToCategories() {
-  document.getElementById("category-buttons").style.display = "block";
-  document.querySelectorAll(".commands-section").forEach(div => div.style.display = "none");
+  document.getElementById("category-buttons").style.display = "flex";
+  document.querySelectorAll(".commands-section").forEach(el => el.style.display = "none");
 }
