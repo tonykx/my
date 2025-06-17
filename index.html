@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Contador de Progresso</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      text-align: center;
+      padding: 40px;
+      transition: background 0.3s, color 0.3s;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 5px;
+    }
+    #contador {
+      font-size: 2em;
+      color: #00ff88;
+      margin: 20px 0;
+    }
+    #versiculo {
+      font-size: 1.1em;
+      color: #aaa;
+      margin-top: 30px;
+      font-style: italic;
+      padding: 0 10px;
+    }
+    button {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      background-color: #333;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #444;
+    }
+
+    /* Tema Claro */
+    .claro {
+      background-color: #f2f2f2;
+      color: #000;
+    }
+    .claro #contador {
+      color: #007a3d;
+    }
+    .claro #versiculo {
+      color: #444;
+    }
+    .claro button {
+      background-color: #ddd;
+      color: #000;
+    }
+    .claro button:hover {
+      background-color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>Contador de Progresso</h1>
+  <p>Desde: <strong>16/06/2025</strong></p>
+  <div id="contador">Carregando...</div>
+  <div id="versiculo">Carregando versículo...</div>
+  <button onclick="alternarTema()">Alternar Tema</button>
+
+  <script>
+    const dataInicio = new Date("2025-06-16T00:00:00");
+
+    const versiculos = [
+      "Tudo posso naquele que me fortalece. (Filipenses 4:13)",
+      "O Senhor é meu pastor, nada me faltará. (Salmo 23:1)",
+      "Entrega o teu caminho ao Senhor, confia nele, e o mais ele fará. (Salmo 37:5)",
+      "Não temas, porque eu sou contigo. (Isaías 41:10)",
+      "O choro pode durar uma noite, mas a alegria vem pela manhã. (Salmo 30:5)",
+      "Sede fortes e corajosos. (Josué 1:9)",
+      "Guardei a tua palavra no meu coração, para não pecar contra ti. (Salmo 119:11)",
+      "Aquietai-vos e sabei que eu sou Deus. (Salmo 46:10)",
+      "Buscai primeiro o Reino de Deus. (Mateus 6:33)",
+      "Confia no Senhor de todo o teu coração. (Provérbios 3:5)"
+    ];
+
+    function atualizarContador() {
+      const agora = new Date();
+      let diff = agora - dataInicio;
+
+      const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+      diff %= (1000 * 60 * 60 * 24);
+
+      const horas = Math.floor(diff / (1000 * 60 * 60));
+      diff %= (1000 * 60 * 60);
+
+      const minutos = Math.floor(diff / (1000 * 60));
+      diff %= (1000 * 60);
+
+      const segundos = Math.floor(diff / 1000);
+
+      document.getElementById("contador").textContent =
+        `${dias} dia${dias !== 1 ? 's' : ''}, ` +
+        `${horas} hora${horas !== 1 ? 's' : ''}, ` +
+        `${minutos} minuto${minutos !== 1 ? 's' : ''} e ` +
+        `${segundos} segundo${segundos !== 1 ? 's' : ''}`;
+    }
+
+    function mostrarVersiculo() {
+      const index = Math.floor(Math.random() * versiculos.length);
+      document.getElementById("versiculo").textContent = versiculos[index];
+    }
+
+    function alternarTema() {
+      document.body.classList.toggle("claro");
+    }
+
+    // Início
+    setInterval(atualizarContador, 1000);
+    setInterval(mostrarVersiculo, 30000); // troca a cada 30s
+    atualizarContador();
+    mostrarVersiculo();
+  </script>
+</body>
+</html>
