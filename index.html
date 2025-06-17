@@ -4,17 +4,161 @@
   <meta charset="UTF-8">
   <title>Contador de Progresso</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css"> <!-- Arquivo CSS externo -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      text-align: center;
+      padding: 40px;
+      transition: background 0.3s, color 0.3s;
+      max-width: 500px;
+      margin: auto;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 5px;
+    }
+    #contador {
+      font-size: 2em;
+      color: #00ff88;
+      margin: 20px 0;
+    }
+    #versiculo {
+      font-size: 1.1em;
+      color: #aaa;
+      margin-top: 30px;
+      font-style: italic;
+      padding: 0 10px;
+    }
+    #mensagem {
+      font-size: 1.2em;
+      color: #FFD700;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    #conquista {
+      font-size: 1.3em;
+      color: #32CD32;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    button {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      background-color: #333;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #444;
+    }
+    button:focus {
+      outline: 2px solid #00ff88;
+    }
+
+    /* Tema Claro */
+    .claro {
+      background-color: #f2f2f2;
+      color: #000;
+    }
+    .claro #contador {
+      color: #007a3d;
+    }
+    .claro #versiculo {
+      color: #444;
+    }
+    .claro #mensagem {
+      color: #DAA520;
+    }
+    .claro #conquista {
+      color: #008000;
+    }
+    .claro button {
+      background-color: #ddd;
+      color: #000;
+    }
+    .claro button:hover {
+      background-color: #ccc;
+    }
+  </style>
 </head>
 <body>
   <h1>Contador de Progresso</h1>
   <p>Desde: <strong>16/06/2025</strong></p>
   <div id="contador">0 dias, 0 horas, 0 minutos e 0 segundos</div>
-  <div id="versiculo">Carregando versículo...</div>
-  <div id="mensagem">Carregando mensagem...</div>
+  <div id="versiculo">"Tudo posso naquele que me fortalece. (Filipenses 4:13)"</div>
+  <div id="mensagem">Você está indo muito bem! Continue firme!</div>
   <div id="conquista">Nenhuma conquista desbloqueada ainda.</div>
   <button onclick="alternarTema()" aria-label="Alternar entre tema claro e escuro">Alternar Tema</button>
 
-  <script src="script.js"></script>
+  <script>
+    const dataInicio = new Date("2025-06-16T00:00:00");
+
+    const versiculos = [
+      "Tudo posso naquele que me fortalece. (Filipenses 4:13)",
+      "O Senhor é meu pastor, nada me faltará. (Salmo 23:1)",
+      "Entrega o teu caminho ao Senhor, confia nele, e o mais ele fará. (Salmo 37:5)",
+      "Não temas, porque eu sou contigo. (Isaías 41:10)",
+      "O choro pode durar uma noite, mas a alegria vem pela manhã. (Salmo 30:5)",
+      "Sede fortes e corajosos. (Josué 1:9)",
+      "Guardei a tua palavra no meu coração, para não pecar contra ti. (Salmo 119:11)",
+      "Aquietai-vos e sabei que eu sou Deus. (Salmo 46:10)",
+      "Buscai primeiro o Reino de Deus. (Mateus 6:33)",
+      "Confia no Senhor de todo o teu coração. (Provérbios 3:5)"
+    ];
+
+    const conquistas = [
+      { dias: 1, texto: "🏆 1 dia! Você deu o primeiro passo!" },
+      { dias: 7, texto: "🌟 7 dias! Uma semana vencida!" },
+      { dias: 14, texto: "🏅 14 dias! Duas semanas de determinação!" },
+      { dias: 30, texto: "🏆 30 dias! Um mês de superação!" },
+      { dias: 60, texto: "🔥 60 dias! Você está no caminho certo!" },
+      { dias: 100, texto: "💪 100 dias! Sua liberdade está crescendo!" },
+      { dias: 365, texto: "🎖️ 1 ano! Você provou sua força!" }
+    ];
+
+    function atualizarContador() {
+      const agora = new Date();
+      let diff = agora - dataInicio;
+
+      const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+      diff %= (1000 * 60 * 60 * 24);
+
+      const horas = Math.floor(diff / (1000 * 60 * 60));
+      diff %= (1000 * 60 * 60);
+
+      const minutos = Math.floor(diff / (1000 * 60));
+      diff %= (1000 * 60);
+
+      const segundos = Math.floor(diff / 1000);
+
+      document.getElementById("contador").textContent =
+        `${dias} dia${dias !== 1 ? 's' : ''}, ` +
+        `${horas} hora${horas !== 1 ? 's' : ''}, ` +
+        `${minutos} minuto${minutos !== 1 ? 's' : ''} e ` +
+        `${segundos} segundo${segundos !== 1 ? 's' : ''}`;
+      
+      const conquistaAtual = conquistas.find(c => c.dias === dias);
+      document.getElementById("conquista").textContent = conquistaAtual ? conquistaAtual.texto : "Nenhuma conquista desbloqueada ainda.";
+    }
+
+    function mostrarVersiculo() {
+      const index = Math.floor(Math.random() * versiculos.length);
+      document.getElementById("versiculo").textContent = versiculos[index];
+    }
+
+    function alternarTema() {
+      document.body.classList.toggle("claro");
+    }
+
+    setInterval(atualizarContador, 1000);
+    setInterval(mostrarVersiculo, 30000);
+    atualizarContador();
+    mostrarVersiculo();
+  </script>
 </body>
 </html>
