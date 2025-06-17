@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Meu Progresso Diário</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      text-align: center;
+      padding: 40px;
+    }
+    h1 { font-size: 2em; margin-bottom: 5px; }
+    #contador { font-size: 2em; color: #00ff88; margin: 20px 0; }
+    #versiculo { font-size: 1.1em; color: #aaa; margin-top: 30px; font-style: italic; padding: 0 10px; }
+  </style>
+</head>
+<body>
+  <h1>Meu Progresso Diário</h1>
+  <p>Desde: <strong>16/06/2025</strong></p>
+  <div id="contador">Carregando...</div>
+  <div id="versiculo">Carregando versículo...</div>
+
+  <script>
+    const dataInicio = new Date("2025-06-16T00:00:00");
+    const versiculos = [
+      "Tudo posso naquele que me fortalece. (Filipenses 4:13)",
+      "O Senhor é meu pastor, nada me faltará. (Salmo 23:1)",
+      "Entrega o teu caminho ao Senhor, confia nele, e o mais ele fará. (Salmo 37:5)",
+      "Não temas, porque eu sou contigo. (Isaías 41:10)",
+      "O choro pode durar uma noite, mas a alegria vem pela manhã. (Salmo 30:5)"
+    ];
+
+    function atualizarContador() {
+      const agora = new Date();
+      let diff = agora - dataInicio;
+      const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+      diff %= (1000 * 60 * 60 * 24);
+      const horas = Math.floor(diff / (1000 * 60 * 60));
+      diff %= (1000 * 60 * 60);
+      const minutos = Math.floor(diff / (1000 * 60));
+      diff %= (1000 * 60);
+      const segundos = Math.floor(diff / 1000);
+
+      document.getElementById("contador").textContent =
+        `${dias} dia${dias !== 1 ? 's' : ''}, ${horas}h, ${minutos}m e ${segundos}s`;
+    }
+
+    function mostrarVersiculo() {
+      const v = versiculos[Math.floor(Math.random() * versiculos.length)];
+      document.getElementById("versiculo").textContent = v;
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+
+    setInterval(atualizarContador, 1000);
+    setInterval(mostrarVersiculo, 30000);
+    atualizarContador();
+    mostrarVersiculo();
+  </script>
+</body>
+</html>
