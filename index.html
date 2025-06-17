@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Contador de Progresso</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      text-align: center;
+      padding: 30px 20px;
+      max-width: 500px;
+      margin: auto;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+    #contador {
+      font-size: 1.5em;
+      color: #00ff88;
+      margin: 20px 0 30px;
+    }
+    .versiculo-box {
+      background-color: #1e1e1e;
+      padding: 15px;
+      border-radius: 10px;
+      font-style: italic;
+      color: #ccc;
+      margin-bottom: 30px;
+    }
+    .versiculo-box h3 {
+      margin: 0 0 10px;
+      font-size: 1em;
+      font-weight: normal;
+      color: #00ffaa;
+    }
+    #mensagem {
+      font-size: 1.2em;
+      color: #FFD700;
+      margin-bottom: 30px;
+      font-weight: bold;
+    }
+    button {
+      margin: 10px 5px;
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      background-color: #333;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #444;
+    }
+    #painelConquistas {
+      margin-top: 20px;
+      text-align: left;
+      background-color: #1e1e1e;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    footer {
+      margin-top: 40px;
+      font-size: 0.9em;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <h1>Contador de Progresso</h1>
+  <p>Desde: <strong>16/06/2025</strong></p>
+  <div id="contador">0 dias</div>
+
+  <div class="versiculo-box">
+    <h3>📖 Versículo do momento:</h3>
+    <div id="versiculo">"Tudo posso naquele que me fortalece. (Filipenses 4:13)"</div>
+  </div>
+
+  <div id="mensagem">Você está indo muito bem! Continue firme!</div>
+
+  <button onclick="toggleConquistas()">Ver Conquistas</button>
+
+  <div id="painelConquistas" style="display:none;">
+    <h2>Conquistas</h2>
+    <div id="conquistasDesbloqueadas"><strong>✅ Desbloqueadas:</strong><br><em>Nenhuma ainda.</em></div>
+    <br>
+    <div id="conquistasFuturas"><strong>🔒 Faltam conquistar:</strong></div>
+  </div>
+
+  <script>
+    const dataInicio = new Date("2025-06-16T00:00:00");
+    const versiculos = [
+      "Tudo posso naquele que me fortalece. (Filipenses 4:13)",
+      "O Senhor é meu pastor, nada me faltará. (Salmo 23:1)",
+      "Entrega o teu caminho ao Senhor, confia nele, e o mais ele fará. (Salmo 37:5)",
+      "Não temas, porque eu sou contigo. (Isaías 41:10)",
+      "O choro pode durar uma noite, mas a alegria vem pela manhã. (Salmo 30:5)",
+      "Sede fortes e corajosos. (Josué 1:9)",
+      "Guardei a tua palavra no meu coração, para não pecar contra ti. (Salmo 119:11)",
+      "Aquietai-vos e sabei que eu sou Deus. (Salmo 46:10)",
+      "Buscai primeiro o Reino de Deus. (Mateus 6:33)",
+      "Confia no Senhor de todo o teu coração. (Provérbios 3:5)"
+    ];
+    const conquistas = [
+      { dias: 1, texto: "🏆 1 dia! Você deu o primeiro passo!" },
+      { dias: 7, texto: "🌟 7 dias! Uma semana vencida!" },
+      { dias: 14, texto: "🏅 14 dias! Duas semanas de determinação!" },
+      { dias: 30, texto: "🏆 30 dias! Um mês de superação!" },
+      { dias: 60, texto: "🔥 60 dias! Você está no caminho certo!" },
+      { dias: 100, texto: "💪 100 dias! Sua liberdade está crescendo!" },
+      { dias: 365, texto: "🎖️ 1 ano! Você provou sua força!" }
+    ];
+
+    function atualizarContador() {
+      const agora = new Date();
+      let diff = agora - dataInicio;
+
+      const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+      diff %= (1000 * 60 * 60 * 24);
+      const horas = Math.floor(diff / (1000 * 60 * 60));
+      diff %= (1000 * 60 * 60);
+      const minutos = Math.floor(diff / (1000 * 60));
+      diff %= (1000 * 60);
+      const segundos = Math.floor(diff / 1000);
+
+      document.getElementById("contador").textContent =
+        `${dias} dia${dias !== 1 ? 's' : ''}, ${horas}h ${minutos}min ${segundos}s`;
+
+      atualizarConquistas(dias);
+    }
+
+    function atualizarConquistas(dias) {
+      const desbloqueadas = conquistas.filter(c => dias >= c.dias);
+      const futuras = conquistas.filter(c => dias < c.dias);
+
+      document.getElementById("conquistasDesbloqueadas").innerHTML =
+        desbloqueadas.length
+          ? "<strong>✅ Desbloqueadas:</strong><ul>" + desbloqueadas.map(c => `<li>${c.texto}</li>`).join('') + "</ul>"
+          : "<strong>✅ Desbloqueadas:</strong><br><em>Nenhuma ainda.</em>";
+
+      document.getElementById("conquistasFuturas").innerHTML =
+        futuras.length
+          ? "<strong>🔒 Faltam conquistar:</strong><ul>" + futuras.map(c => `<li>${c.dias} dias – ${c.texto}</li>`).join('') + "</ul>"
+          : "<strong>🎉 Todas as conquistas foram alcançadas!</strong>";
+    }
+
+    function mostrarVersiculo() {
+      const index = Math.floor(Math.random() * versiculos.length);
+      document.getElementById("versiculo").textContent = versiculos[index];
+    }
+
+    function toggleConquistas() {
+      const painel = document.getElementById("painelConquistas");
+      painel.style.display = painel.style.display === "none" ? "block" : "none";
+    }
+
+    setInterval(atualizarContador, 1000);
+    setInterval(mostrarVersiculo, 300000); // 5 minutos
+    atualizarContador();
+    mostrarVersiculo();
+  </script>
+
+  <footer>
+    Este site já foi utilizado para mostrar comandos de um bot, mas agora tornou-se um projeto pessoal de motivação e superação.
+  </footer>
+</body>
+</html>
