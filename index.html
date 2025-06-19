@@ -4,110 +4,104 @@
   <meta charset="UTF-8">
   <title>Contador de Progresso</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #121212;
-      color: #ffffff;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: #fff;
       text-align: center;
       padding: 30px 20px;
       max-width: 500px;
       margin: auto;
-    }
-    h1 {
-      font-size: 2em;
-      margin-bottom: 10px;
+      position: relative;
     }
     #contador {
-      font-size: 1.5em;
+      font-size: 1.8em;
       color: #00ff88;
-      margin: 20px 0 30px;
+      font-weight: bold;
+      margin: 20px 0 10px;
     }
-    .versiculo-box {
-      background-color: #1e1e1e;
-      padding: 15px;
-      border-radius: 10px;
-      font-style: italic;
-      color: #ccc;
-      margin-bottom: 30px;
+    .progresso-container {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 40px auto;
     }
-    .versiculo-box h3 {
-      margin: 0 0 10px;
-      font-size: 1em;
-      font-weight: normal;
-      color: #00ffaa;
+    svg {
+      transform: rotate(-90deg);
     }
-    #mensagem {
+    circle {
+      transition: stroke-dasharray 0.5s ease;
+    }
+    .porcentagem {
+      position: absolute;
+      width: 100%;
+      top: 50%;
+      transform: translateY(-50%);
       font-size: 1.2em;
-      color: #FFD700;
-      margin-bottom: 30px;
+      font-weight: bold;
+      color: #00ff88;
+    }
+    #meta {
+      font-size: 1.2em;
+      margin-top: 20px;
+      color: #ffd700;
       font-weight: bold;
     }
-    button {
-      margin: 10px 5px;
-      padding: 10px 20px;
-      font-size: 1em;
-      border: none;
-      border-radius: 5px;
-      background-color: #333;
-      color: #fff;
+    #trofeu {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 2em;
       cursor: pointer;
+      transition: transform 0.2s ease;
     }
-    button:hover {
-      background-color: #444;
+    #trofeu:hover {
+      transform: scale(1.2);
     }
-    #painelConquistas {
-      margin-top: 20px;
+    #conquistas {
+      display: none;
+      position: absolute;
+      top: 50px;
+      left: 10px;
+      background: #16213e;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 1em;
+      box-shadow: 2px 2px 10px rgba(0, 255, 136, 0.6);
       text-align: left;
-      background-color: #1e1e1e;
-      padding: 15px;
-      border-radius: 10px;
-    }
-    ul {
-      padding-left: 20px;
     }
     footer {
       margin-top: 40px;
       font-size: 0.9em;
-      color: #888;
+      color: #bbb;
     }
   </style>
 </head>
 <body>
-  <h1>Contador de Progresso</h1>
-  <p>Desde: <strong>16/06/2025</strong></p>
-  <div id="contador">0 dias</div>
+  <span id="trofeu">🏆</span>
+  <div id="contador">0d 0h 0m 0s</div>
 
-  <div class="versiculo-box">
-    <h3>📖 Versículo do momento:</h3>
-    <div id="versiculo">"Tudo posso naquele que me fortalece. (Filipenses 4:13)"</div>
+  <div class="progresso-container">
+    <svg width="120" height="120">
+      <circle cx="60" cy="60" r="50" stroke="#444" stroke-width="10" fill="none"></circle>
+      <circle id="progresso" cx="60" cy="60" r="50" stroke="#00ff88" stroke-width="10" fill="none"
+              stroke-dasharray="0, 314"></circle>
+    </svg>
+    <div class="porcentagem" id="porcentagemTexto">0%</div>
   </div>
 
-  <div id="mensagem">Você está indo muito bem! Continue firme!</div>
+  <div id="meta">🔄 Calculando...</div>
 
-  <button onclick="toggleConquistas()">Ver Conquistas</button>
-
-  <div id="painelConquistas" style="display:none;">
-    <h2>Conquistas</h2>
-    <div id="conquistasDesbloqueadas"><strong>✅ Desbloqueadas:</strong><br><em>Nenhuma ainda.</em></div>
-    <br>
-    <div id="conquistasFuturas"><strong>🔒 Faltam conquistar:</strong></div>
+  <div id="conquistas">
+    <h3>Minhas Conquistas 🎖️</h3>
+    <ul id="listaConquistas"></ul>
   </div>
 
   <script>
     const dataInicio = new Date("2025-06-16T00:00:00");
-    const versiculos = [
-      "Tudo posso naquele que me fortalece. (Filipenses 4:13)",
-      "O Senhor é meu pastor, nada me faltará. (Salmo 23:1)",
-      "Entrega o teu caminho ao Senhor, confia nele, e o mais ele fará. (Salmo 37:5)",
-      "Não temas, porque eu sou contigo. (Isaías 41:10)",
-      "O choro pode durar uma noite, mas a alegria vem pela manhã. (Salmo 30:5)",
-      "Sede fortes e corajosos. (Josué 1:9)",
-      "Guardei a tua palavra no meu coração, para não pecar contra ti. (Salmo 119:11)",
-      "Aquietai-vos e sabei que eu sou Deus. (Salmo 46:10)",
-      "Buscai primeiro o Reino de Deus. (Mateus 6:33)",
-      "Confia no Senhor de todo o teu coração. (Provérbios 3:5)"
-    ];
+
     const conquistas = [
       { dias: 1, texto: "🏆 1 dia! Você deu o primeiro passo!" },
       { dias: 7, texto: "🌟 7 dias! Uma semana vencida!" },
@@ -121,54 +115,65 @@
     function atualizarContador() {
       const agora = new Date();
       let diff = agora - dataInicio;
-
+      
       const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
-      diff %= (1000 * 60 * 60 * 24);
-      const horas = Math.floor(diff / (1000 * 60 * 60));
-      diff %= (1000 * 60 * 60);
-      const minutos = Math.floor(diff / (1000 * 60));
-      diff %= (1000 * 60);
-      const segundos = Math.floor(diff / 1000);
+      const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const segundos = Math.floor((diff % (1000 * 60)) / 1000);
 
-      document.getElementById("contador").textContent =
-        `${dias} dia${dias !== 1 ? 's' : ''}, ${horas}h ${minutos}min ${segundos}s`;
+      document.getElementById("contador").textContent = 
+        `${dias}d ${horas}h ${minutos}m ${segundos}s`;
 
-      atualizarConquistas(dias);
+      atualizarMeta(dias);
+      atualizarProgresso(dias);
+      atualizarListaConquistas(dias);
     }
 
-    function atualizarConquistas(dias) {
-      const desbloqueadas = conquistas.filter(c => dias >= c.dias);
-      const futuras = conquistas.filter(c => dias < c.dias);
-
-      document.getElementById("conquistasDesbloqueadas").innerHTML =
-        desbloqueadas.length
-          ? "<strong>✅ Desbloqueadas:</strong><ul>" + desbloqueadas.map(c => `<li>${c.texto}</li>`).join('') + "</ul>"
-          : "<strong>✅ Desbloqueadas:</strong><br><em>Nenhuma ainda.</em>";
-
-      document.getElementById("conquistasFuturas").innerHTML =
-        futuras.length
-          ? "<strong>🔒 Faltam conquistar:</strong><ul>" + futuras.map(c => `<li>${c.dias} dias – ${c.texto}</li>`).join('') + "</ul>"
-          : "<strong>🎉 Todas as conquistas foram alcançadas!</strong>";
+    function atualizarMeta(dias) {
+      const proximaConquista = conquistas.find(c => c.dias > dias);
+      if (proximaConquista) {
+        document.getElementById("meta").innerHTML = 
+          `Próxima conquista: <strong>${proximaConquista.texto}</strong> (${proximaConquista.dias - dias}d restantes)`;
+      } else {
+        document.getElementById("meta").innerHTML = "🎉 Você já alcançou todas as conquistas!";
+      }
     }
 
-    function mostrarVersiculo() {
-      const index = Math.floor(Math.random() * versiculos.length);
-      document.getElementById("versiculo").textContent = versiculos[index];
+    function atualizarProgresso(dias) {
+      const proximaConquista = conquistas.find(c => c.dias > dias);
+      if (!proximaConquista) return;
+
+      const falta = proximaConquista.dias - dias;
+      const progresso = ((proximaConquista.dias - falta) / proximaConquista.dias) * 100;
+      
+      document.getElementById("porcentagemTexto").textContent = `${Math.round(progresso)}%`;
+      document.getElementById("progresso").setAttribute("stroke-dasharray", `${(progresso * 314) / 100}, 314`);
     }
 
-    function toggleConquistas() {
-      const painel = document.getElementById("painelConquistas");
-      painel.style.display = painel.style.display === "none" ? "block" : "none";
+    function atualizarListaConquistas(dias) {
+      const lista = document.getElementById("listaConquistas");
+      lista.innerHTML = "";
+      
+      conquistas.forEach(c => {
+        if (c.dias <= dias) {
+          const item = document.createElement("li");
+          item.textContent = c.texto;
+          lista.appendChild(item);
+        }
+      });
     }
+
+    document.getElementById("trofeu").addEventListener("click", function() {
+      const conquistasDiv = document.getElementById("conquistas");
+      conquistasDiv.style.display = conquistasDiv.style.display === "none" ? "block" : "none";
+    });
 
     setInterval(atualizarContador, 1000);
-    setInterval(mostrarVersiculo, 300000); // 5 minutos
     atualizarContador();
-    mostrarVersiculo();
   </script>
 
   <footer>
-    Este site já foi utilizado para mostrar comandos de um bot, mas agora tornou-se um projeto pessoal de motivação.
+   © Este site passou por uma transformação. Ele não tem mais o propósito antigo e agora faz parte de um projeto pessoal. O conteúdo anterior foi retirado.
   </footer>
 </body>
 </html>
