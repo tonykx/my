@@ -1,4 +1,4 @@
-import { auth, db, provider } from "./firebase.js";
+import { auth, provider, db } from "./firebase.js";
 
 import {
   signInWithRedirect,
@@ -29,32 +29,37 @@ const contador = document.getElementById("contador");
 let usuario = null;
 let timer = null;
 
-// Verifica se o script carregou
-alert("app.js carregado!");
-
+// Descobre se houve erro no retorno do login
 try {
-  await getRedirectResult(auth);
+  const result = await getRedirectResult(auth);
+
+  if (result) {
+    alert("Login realizado com sucesso!");
+    console.log(result);
+  }
 } catch (e) {
-  alert("Erro no login: " + e.message);
+  alert(
+    "ERRO:\n\n" +
+    e.code +
+    "\n\n" +
+    e.message
+  );
   console.error(e);
 }
 
-btnLogin.addEventListener("click", async () => {
-  alert("Botão funcionando!");
+// Botão Login
+btnLogin.onclick = async () => {
+  await signInWithRedirect(auth, provider);
+};
 
-  try {
-    await signInWithRedirect(auth, provider);
-  } catch (e) {
-    alert("Erro: " + e.message);
-    console.error(e);
-  }
-});
-
-btnSair.addEventListener("click", async () => {
+// Botão Sair
+btnSair.onclick = async () => {
   await signOut(auth);
-});
+};
 
+// Verifica login
 onAuthStateChanged(auth, async (user) => {
+  console.log("Usuário:", user);
 
   if (!user) {
     loginDiv.style.display = "block";
@@ -67,14 +72,14 @@ onAuthStateChanged(auth, async (user) => {
   loginDiv.style.display = "none";
   appDiv.style.display = "block";
 
-  nome.textContent = user.displayName || "";
-  foto.src = user.photoURL || "";
+  nome.textContent = user.displayName;
+  foto.src = user.photoURL;
 
   const ref = doc(db, "usuarios", user.uid);
   const snap = await getDoc(ref);
 
   if (!snap.exists()) {
-    const vicio = prompt("Qual vício deseja vencer?") || "Sem definição";
+    const vicio = prompt("Qual vício deseja vencer?");
 
     await setDoc(ref, {
       vicio,
@@ -114,7 +119,7 @@ function atualizar(inicio) {
     `${dias} dias ${horas}h ${minutos}m ${segundos}s`;
 }
 
-btnRecai.addEventListener("click", async () => {
+btnRecai.onclick = async () => {
   if (!confirm("Deseja reiniciar o contador?")) return;
 
   await updateDoc(doc(db, "usuarios", usuario.uid), {
@@ -122,4 +127,4 @@ btnRecai.addEventListener("click", async () => {
   });
 
   carregar();
-});
+};
