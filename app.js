@@ -1,3 +1,12 @@
+import { auth, db, provider } from "./firebase.js";
+
+import {
+  signInWithRedirect,
+  getRedirectResult,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+
 import {
   doc,
   getDoc,
@@ -20,95 +29,96 @@ const contador = document.getElementById("contador");
 let usuario = null;
 let timer = null;
 
-btnLogin.onclick = async () => {
-    await signInWithPopup(auth, provider);
-};
+// Recupera o resultado do login após voltar do Google
+try {
+  await getRedirectResult(auth);
+} catch (e) {
+  console.error(e);
+}
 
-btnSair.onclick = async () => {
-    await signOut(auth);
-};
+btnLogin.addEventListener("click", async () => {
+  await signInWithRedirect(auth, provider);
+});
+
+btnSair.addEventListener("click", async () => {
+  await signOut(auth);
+});
 
 onAuthStateChanged(auth, async (user) => {
 
-    if (!user) {
-        loginDiv.style.display = "block";
-        appDiv.style.display = "none";
-        return;
-    }
+  if (!user) {
+    loginDiv.style.display = "block";
+    appDiv.style.display = "none";
+    return;
+  }
 
-    usuario = user;
+  usuario = user;
 
-    loginDiv.style.display = "none";
-    appDiv.style.display = "block";
+  loginDiv.style.display = "none";
+  appDiv.style.display = "block";
 
-    nome.innerText = user.displayName;
-    foto.src = user.photoURL;
+  nome.textContent = user.displayName || "";
+  foto.src = user.photoURL || "";
 
-    const ref = doc(db, "usuarios", user.uid);
+  const ref = doc(db, "usuarios", user.uid);
 
-    const snap = await getDoc(ref);
+  const snap = await getDoc(ref);
 
-    if (!snap.exists()) {
+  if (!snap.exists()) {
 
-        const vicio = prompt("Qual vício deseja vencer?");
+    const vicio = prompt("Qual vício deseja vencer?");
 
-        await setDoc(ref, {
-            vicio,
-            inicio: Date.now()
-        });
+    await setDoc(ref, {
+      vicio: vicio || "Sem definição",
+      inicio: Date.now()
+    });
 
-    }
+  }
 
-    carregar();
+  carregar();
+
 });
 
-async function carregar(){
+async function carregar() {
 
-    const ref = doc(db,"usuarios",usuario.uid);
+  const ref = doc(db, "usuarios", usuario.uid);
 
-    const snap = await getDoc(ref);
+  const snap = await getDoc(ref);
 
-    const dados = snap.data();
+  const dados = snap.data();
 
-    titulo.innerText = "Livre de: " + dados.vicio;
+  titulo.textContent = "Livre de: " + dados.vicio;
 
-    atualizar(dados.inicio);
+  atualizar(dados.inicio);
 
-    clearInterval(timer);
+  clearInterval(timer);
 
-    timer = setInterval(()=>{
-
-        atualizar(dados.inicio);
-
-    },1000);
+  timer = setInterval(() => atualizar(dados.inicio), 1000);
 
 }
 
-function atualizar(inicio){
+function atualizar(inicio) {
 
-    const tempo = Date.now()-inicio;
+  const tempo = Date.now() - inicio;
 
-    const dias=Math.floor(tempo/86400000);
-    const horas=Math.floor(tempo/3600000)%24;
-    const minutos=Math.floor(tempo/60000)%60;
-    const segundos=Math.floor(tempo/1000)%60;
+  const dias = Math.floor(tempo / 86400000);
+  const horas = Math.floor(tempo / 3600000) % 24;
+  const minutos = Math.floor(tempo / 60000) % 60;
+  const segundos = Math.floor(tempo / 1000) % 60;
 
-    contador.innerText=
+  contador.textContent =
     `${dias} dias ${horas}h ${minutos}m ${segundos}s`;
 
 }
 
-btnRecai.onclick = async ()=>{
+btnRecai.addEventListener("click", async () => {
 
-    if(!confirm("Deseja reiniciar o contador?")) return;
+  if (!confirm("Deseja reiniciar o contador?")) return;
 
-    await updateDoc(
-        doc(db,"usuarios",usuario.uid),
-        {
-            inicio:Date.now()
-        }
-    );
+  await updateDoc(doc(db, "usuarios", usuario.uid), {
+    inicio: Date.now()
+  });
 
-    carregar();
+  carregar();
 
-};
+});
