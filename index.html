@@ -1,1 +1,66 @@
-<!DOCTYPE html><html lang='pt-BR'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Dias de Liberdade</title><link rel='stylesheet' href='style.css'></head><body><div class='card' id='setup'><h1>Dias de Liberdade</h1><input id='vicio' placeholder='Qual vício deseja vencer?'><button onclick='iniciar()'>Começar Jornada</button></div><div class='card hidden' id='painel'><h2 id='titulo'></h2><div id='contador'></div><p id='frase'></p><button onclick='recai()'>Recaí</button><button onclick='alterar()'>Alterar vício</button></div><script src='script.js'></script></body></html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dias de Liberdade</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="login">
+
+        <h1>Dias de Liberdade</h1>
+
+        <p>
+            Faça login com sua conta Google para sincronizar seu contador em qualquer dispositivo.
+        </p>
+
+        <button id="loginGoogle">
+            Entrar com Google
+        </button>
+
+    </div>
+
+    <div id="app" style="display:none;">
+
+        <div class="topo">
+
+            <img id="foto" width="60" height="60" alt="Foto do usuário">
+
+            <div>
+
+                <h2 id="nome"></h2>
+
+                <button id="sair">
+                    Sair
+                </button>
+
+            </div>
+
+        </div>
+
+        <h2 id="titulo"></h2>
+
+        <h1 id="contador">
+            0 dias
+        </h1>
+
+        <button id="recai">
+            Recaí
+        </button>
+
+    </div>
+
+    <!-- Firebase -->
+    <script type="module" src="firebase.js"></script>
+
+    <!-- Aplicação -->
+    <script type="module" src="app.js"></script>
+
+</body>
+
+</html>
