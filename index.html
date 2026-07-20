@@ -3,246 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minha Jornada - Foco & Evolução</title>
+    <title>Jornada Foco</title>
     <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-color: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
-            --danger: #ef4444;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            background-color: var(--card-bg);
-            padding: 2.5rem;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            max-width: 450px;
-            width: 100%;
-        }
-
-        h1 {
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-            font-weight: 700;
-        }
-
-        p.subtitle {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 2rem;
-        }
-
-        .counter {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: var(--accent);
-            margin-bottom: 0.2rem;
-            letter-spacing: -1px;
-        }
-
-        .time-detail {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-            font-weight: 500;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-bottom: 2rem;
-        }
-
-        button {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            width: 100%;
-        }
-
-        .btn-danger {
-            background-color: transparent;
-            color: var(--danger);
-            border: 1px solid var(--danger);
-        }
-
-        .btn-danger:hover {
-            background-color: rgba(239, 68, 68, 0.1);
-        }
-
-        .streak-card {
-            background-color: rgba(255, 255, 255, 0.03);
-            padding: 1rem;
-            border-radius: 8px;
-            border-left: 4px solid var(--accent);
-            text-align: left;
-        }
-
-        .streak-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .streak-desc {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
+        :root { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --accent: #3b82f6; --danger: #ef4444; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        body { background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .container { background-color: var(--card); padding: 2.5rem; border-radius: 16px; text-align: center; max-width: 450px; width: 100%; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .counter { font-size: 3rem; font-weight: 800; color: var(--accent); margin-bottom: 0.5rem; }
+        .btn { padding: 1rem 2rem; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 10px; }
+        .btn-start { background: var(--accent); color: white; }
+        .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+        #quote { font-style: italic; color: #94a3b8; margin: 20px 0; min-height: 50px; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>Sua Nova Jornada</h1>
-        <p class="subtitle">O tempo corre de forma automática. Mantenha o foco.</p>
-        
-        <div class="counter" id="days-count">0d</div>
-        <div class="time-detail" id="time-detail">00h 00m 00s</div>
-
-        <div class="btn-group">
-            <button class="btn-danger" onclick="resetCounter()">Recair / Reiniciar</button>
+        <!-- Tela de Início -->
+        <div id="start-view">
+            <h1>Nova Jornada</h1>
+            <p id="quote">"Carregando motivação..."</p>
+            <button class="btn btn-start" onclick="iniciarJornada()">Iniciar Jornada</button>
         </div>
 
-        <div class="streak-card">
-            <div class="streak-title" id="streak-milestone">Nível 1: Começo de Tudo</div>
-            <div class="streak-desc" id="streak-advice">O primeiro passo é o mais difícil. Força!</div>
+        <!-- Tela do Contador -->
+        <div id="counter-view" style="display:none;">
+            <h1>Jornada Ativa</h1>
+            <div class="counter" id="days-count">0d</div>
+            <div id="time-detail" style="color: #94a3b8;">00h 00m 00s</div>
+            <button class="btn btn-danger" onclick="resetCounter()" style="margin-top: 2rem;">Recair / Reiniciar</button>
         </div>
     </div>
 
     <script>
         const TOKEN = "7827502328:AAFXfSmGE72ss7U7E_e7VUb_9v0yieAdsgY";
         const CHAT_ID = "6005814454";
+        const frases = [
+            "A disciplina é a ponte entre metas e realizações.",
+            "Cada segundo longe disso é uma vitória sobre si mesmo.",
+            "Sua mente é sua ferramenta, não sua escrava.",
+            "O controle absoluto começa com uma pequena decisão."
+        ];
 
-        // Se não houver data de início salva, define como AGORA
-        if (!localStorage.getItem('startDate')) {
+        document.getElementById('quote').innerText = frases[Math.floor(Math.random() * frases.length)];
+
+        function checkStatus() {
+            if (localStorage.getItem('startDate')) {
+                document.getElementById('start-view').style.display = 'none';
+                document.getElementById('counter-view').style.display = 'block';
+                atualizarContador();
+            } else {
+                document.getElementById('start-view').style.display = 'block';
+                document.getElementById('counter-view').style.display = 'none';
+            }
+        }
+
+        function iniciarJornada() {
             localStorage.setItem('startDate', new Date().getTime());
+            localStorage.setItem('metasEnviadas', JSON.stringify({}));
+            enviarTelegram("🚀 *Jornada iniciada!* Você tomou a decisão de mudar. Vamos em frente.");
+            checkStatus();
         }
 
-        function enviarTelegram(mensagem) {
-            const url = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
-            fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    chat_id: CHAT_ID,
-                    text: mensagem,
-                    parse_mode: "Markdown"
-                })
-            }).catch(err => console.error("Erro no Telegram:", err));
-        }
-
-        function verificarEEnviarMetas(dias, horas) {
-            const metasEnviadas = JSON.parse(localStorage.getItem('metasEnviadas')) || {};
-
-            // Chave única para controle de metas específicas
-            if (horas >= 12 && dias === 0 && !metasEnviadas['12h']) {
-                enviarTelegram("🌓 *Meta de 12 horas alcançada!* O começo foi feito. Segure a mente!");
-                metasEnviadas['12h'] = true;
-            }
-            if (dias >= 1 && !metasEnviadas['1d']) {
-                enviarTelegram("🔥 *Primeiro dia concluído!* 24 horas limpo. O progresso começou.");
-                metasEnviadas['1d'] = true;
-            }
-            if (dias >= 3 && !metasEnviadas['3d']) {
-                enviarTelegram("🚀 *3 dias alcançados!* Você está resistindo aos primeiros impulsos.");
-                metasEnviadas['3d'] = true;
-            }
-            if (dias >= 7 && !metasEnviadas['7d']) {
-                enviarTelegram("👑 *Uma semana inteira limpa!* Seu corpo e mente agradecem.");
-                metasEnviadas['7d'] = true;
-            }
-            if (dias >= 14 && !metasEnviadas['14d']) {
-                enviarTelegram("💎 *14 dias concluídos!* Duas semanas de domínio próprio.");
-                metasEnviadas['14d'] = true;
-            }
-            if (dias >= 30 && !metasEnviadas['30d']) {
-                enviarTelegram("🏆 *30 DIAS!* Você completou um mês inteiro de vitória. Incrível!");
-                metasEnviadas['30d'] = true;
-            }
-
-            localStorage.setItem('metasEnviadas', JSON.stringify(metasEnviadas));
+        function enviarTelegram(msg) {
+            fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+                method: "POST", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: CHAT_ID, text: msg, parse_mode: "Markdown" })
+            });
         }
 
         function atualizarContador() {
-            const startDate = parseInt(localStorage.getItem('startDate'));
-            const now = new Date().getTime();
-            const diff = now - startDate;
+            const start = parseInt(localStorage.getItem('startDate'));
+            if (!start) return;
 
-            // Cálculos de tempo
-            const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const segundos = Math.floor((diff % (1000 * 60)) / 1000);
+            const diff = new Date().getTime() - start;
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
 
-            // Renderiza na tela
-            document.getElementById('days-count').innerText = `${dias}d`;
-            document.getElementById('time-detail').innerText = 
-                `${String(horas).padStart(2, '0')}h ${String(minutos).padStart(2, '0')}m ${String(segundos).padStart(2, '0')}s`;
+            document.getElementById('days-count').innerText = `${d}d`;
+            document.getElementById('time-detail').innerText = `${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
 
-            // Textos motivacionais dinâmicos
-            const milestone = document.getElementById('streak-milestone');
-            const advice = document.getElementById('streak-advice');
-
-            if (dias < 3) {
-                milestone.innerText = "Nível 1: Primeiros Passos";
-                advice.innerText = "Foque no hoje. Evite os gatilhos iniciais.";
-            } else if (dias < 7) {
-                milestone.innerText = "Nível 2: Quebrando o Hábito";
-                advice.innerText = "A energia está voltando. Ocupe sua mente.";
-            } else if (dias < 14) {
-                milestone.innerText = "Nível 3: Uma Semana Concluída";
-                advice.innerText = "Seu cérebro está mudando. Continue firme.";
-            } else {
-                milestone.innerText = "Nível 4: No Controle";
-                advice.innerText = "Você está se tornando dono das suas decisões.";
-            }
-
-            // Checa envio de mensagens automáticas
-            verificarEEnviarMetas(dias, horas);
+            // Lógica metas
+            const metas = JSON.parse(localStorage.getItem('metasEnviadas'));
+            if (h >= 12 && d === 0 && !metas['12h']) { enviarTelegram("🌓 Meta 12h: Foco total!"); metas['12h']=true; }
+            if (d >= 1 && !metas['1d']) { enviarTelegram("🔥 24h limpo! O vício perde força."); metas['1d']=true; }
+            localStorage.setItem('metasEnviadas', JSON.stringify(metas));
         }
 
         function resetCounter() {
-            if (confirm("Uma recaída é apenas um tropeço. Deseja zerar o tempo e recomeçar agora?")) {
-                enviarTelegram(`⚠️ *O contador foi reiniciado.* Não desista, o processo é contínuo. Força!`);
-                
-                // Reseta datas e histórico de metas enviadas
-                localStorage.setItem('startDate', new Date().getTime());
-                localStorage.setItem('metasEnviadas', JSON.stringify({}));
-                
-                atualizarContador();
+            if (confirm("Deseja mesmo resetar o contador?")) {
+                enviarTelegram("⚠️ Contador reiniciado. Recomeçar é parte do crescimento.");
+                localStorage.removeItem('startDate');
+                checkStatus();
             }
         }
 
-        // Atualiza a cada 1 segundo em tempo real
         setInterval(atualizarContador, 1000);
-        atualizarContador();
+        checkStatus();
     </script>
 </body>
 </html>
+
