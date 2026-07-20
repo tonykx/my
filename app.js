@@ -29,15 +29,25 @@ const contador = document.getElementById("contador");
 let usuario = null;
 let timer = null;
 
-// Recupera o resultado do login após voltar do Google
+// Verifica se o script carregou
+alert("app.js carregado!");
+
 try {
   await getRedirectResult(auth);
 } catch (e) {
+  alert("Erro no login: " + e.message);
   console.error(e);
 }
 
 btnLogin.addEventListener("click", async () => {
-  await signInWithRedirect(auth, provider);
+  alert("Botão funcionando!");
+
+  try {
+    await signInWithRedirect(auth, provider);
+  } catch (e) {
+    alert("Erro: " + e.message);
+    console.error(e);
+  }
 });
 
 btnSair.addEventListener("click", async () => {
@@ -61,28 +71,22 @@ onAuthStateChanged(auth, async (user) => {
   foto.src = user.photoURL || "";
 
   const ref = doc(db, "usuarios", user.uid);
-
   const snap = await getDoc(ref);
 
   if (!snap.exists()) {
-
-    const vicio = prompt("Qual vício deseja vencer?");
+    const vicio = prompt("Qual vício deseja vencer?") || "Sem definição";
 
     await setDoc(ref, {
-      vicio: vicio || "Sem definição",
+      vicio,
       inicio: Date.now()
     });
-
   }
 
   carregar();
-
 });
 
 async function carregar() {
-
   const ref = doc(db, "usuarios", usuario.uid);
-
   const snap = await getDoc(ref);
 
   const dados = snap.data();
@@ -93,12 +97,12 @@ async function carregar() {
 
   clearInterval(timer);
 
-  timer = setInterval(() => atualizar(dados.inicio), 1000);
-
+  timer = setInterval(() => {
+    atualizar(dados.inicio);
+  }, 1000);
 }
 
 function atualizar(inicio) {
-
   const tempo = Date.now() - inicio;
 
   const dias = Math.floor(tempo / 86400000);
@@ -108,11 +112,9 @@ function atualizar(inicio) {
 
   contador.textContent =
     `${dias} dias ${horas}h ${minutos}m ${segundos}s`;
-
 }
 
 btnRecai.addEventListener("click", async () => {
-
   if (!confirm("Deseja reiniciar o contador?")) return;
 
   await updateDoc(doc(db, "usuarios", usuario.uid), {
@@ -120,5 +122,4 @@ btnRecai.addEventListener("click", async () => {
   });
 
   carregar();
-
 });
