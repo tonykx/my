@@ -90,12 +90,22 @@ h1 {
     border-bottom: 1px solid #222d34;
     page-break-after: avoid;
 }
-.card-item {
+
+/* --- Estrutura de Listas Escaneáveis --- */
+.cmd-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.cmd-item {
     background-color: #202c33;
     border-radius: 8px;
-    padding: 8px 10px;
+    padding: 10px;
     margin-bottom: 6px;
     page-break-inside: avoid;
+}
+.badges-wrapper {
+    margin-bottom: 4px;
 }
 .cmd-badge {
     background-color: #00a884;
@@ -104,19 +114,21 @@ h1 {
     border-radius: 4px;
     font-family: monospace;
     font-weight: bold;
-    font-size: 9pt;
+    font-size: 8.5pt;
     display: inline-block;
+    margin-right: 2px;
+    margin-bottom: 2px;
 }
 .cmd-desc {
     font-size: 8.5pt;
     color: #d1d7db;
-    margin: 3px 0 0 0;
+    margin: 0;
 }
 .cmd-example {
     font-size: 8pt;
     color: #8696a0;
     font-style: italic;
-    margin: 2px 0 0 0;
+    margin-top: 2px;
 }
 .footer-box {
     text-align: center;
@@ -142,81 +154,138 @@ h1 {
         💡 <strong>Quer ver todos os comandos?</strong><br>Digite <span style="color:#00a884; font-family:monospace; font-weight:bold;">!menu</span> no nosso grupo de testes!
     </div>
 
-    <!-- Categoria 1: Principais & Músicas -->
+    <!-- Categoria 1: Principais & Downloads -->
     <div class="section-title">🎵 Principais & Downloads</div>
-    <div class="card-item">
-        <span class="cmd-badge">!play</span>
-        <p class="cmd-desc">Baixa e envia áudios de músicas direto no chat.</p>
-        <p class="cmd-example">Exemplo: !play Henrique e Juliano - Arranhão</p>
-    </div>
-    <div class="card-item">
-        <span class="cmd-badge">!instagram</span>
-        <p class="cmd-desc">Baixa vídeos e fotos do Instagram através do link.</p>
-    </div>
-    <div class="card-item">
-        <span class="cmd-badge">!gpt</span>
-        <p class="cmd-desc">Conversa com a Inteligência Artificial para tirar dúvidas.</p>
-    </div>
-    <div class="card-item">
-        <span class="cmd-badge">!clima</span> / <span class="cmd-badge">!signo</span>
-        <p class="cmd-desc">Consulta a previsão do tempo ou o horóscopo do dia.</p>
-    </div>
+    <ul class="cmd-list">
+        <li class="cmd-item">
+            <div class="badges-wrapper"><span class="cmd-badge">!play</span></div>
+            <p class="cmd-desc">Baixa e envia áudios de músicas direto no chat.</p>
+            <p class="cmd-example">Exemplo: !play Henrique e Juliano - Arranhão</p>
+        </li>
+        <li class="cmd-item">
+            <div class="badges-wrapper"><span class="cmd-badge">!instagram</span></div>
+            <p class="cmd-desc">Baixa vídeos e fotos do Instagram através do link.</p>
+        </li>
+        <li class="cmd-item">
+            <div class="badges-wrapper"><span class="cmd-badge">!gpt</span></div>
+            <p class="cmd-desc">Conversa com a Inteligência Artificial para tirar dúvidas.</p>
+        </li>
+        <li class="cmd-item">
+            <div class="badges-wrapper">
+                <span class="cmd-badge">!clima</span>
+                <span class="cmd-badge">!signo</span>
+            </div>
+            <p class="cmd-desc">Consulta a previsão do tempo ou o horóscopo do dia.</p>
+        </li>
+    </ul>
 
     <!-- Categoria 2: Figurinhas Animadas -->
     <div class="section-title">🖼️ Figurinhas Animadas</div>
-    <div class="card-item">
-        <span class="cmd-badge">!attp</span> até <span class="cmd-badge">!attp5</span>
-        <p class="cmd-desc">Cria figurinhas animadas com textos piscantes e efeitos coloridos.</p>
-        <p class="cmd-example">Exemplo: !attp Oi Sumida</p>
-    </div>
+    <ul class="cmd-list">
+        <li class="cmd-item">
+            <div class="badges-wrapper">
+                <span class="cmd-badge">!attp</span> até <span class="cmd-badge">!attp11</span>
+            </div>
+            <p class="cmd-desc">Cria figurinhas animadas com textos piscantes e efeitos coloridos.</p>
+            <p class="cmd-example">Exemplo: !attp Oi Sumida</p>
+        </li>
+    </ul>
 
     <!-- Categoria 3: Religiosos & Espirituais -->
     <div class="section-title">✝️ Bíblia & Fé</div>
-    <div class="card-item">
-        <span class="cmd-badge">!biblia</span> / <span class="cmd-badge">!salmos</span>
-        <p class="cmd-desc">Envia trechos da Bíblia e salmos de reflexão.</p>
-    </div>
-    <div class="card-item">
-        <span class="cmd-badge">!oração</span> / <span class="cmd-badge">!conselhobiblico</span>
-        <p class="cmd-desc">Mensagens diárias de oração e conselhos espirituais.</p>
-    </div>
+    <ul class="cmd-list">
+        <li class="cmd-item">
+            <div class="badges-wrapper">
+                <span class="cmd-badge">!biblia</span>
+                <span class="cmd-badge">!salmos</span>
+            </div>
+            <p class="cmd-desc">Envia trechos da Bíblia e salmos de reflexão.</p>
+        </li>
+        <li class="cmd-item">
+            <div class="badges-wrapper">
+                <span class="cmd-badge">!oração</span>
+                <span class="cmd-badge">!conselhobiblico</span>
+            </div>
+            <p class="cmd-desc">Mensagens diárias de oração e conselhos espirituais.</p>
+        </li>
+    </ul>
 
     <!-- Categoria 4: Ações Divertidas -->
     <div class="section-title">🎭 Ações Divertidas</div>
-    <div class="card-item">
-        <span class="cmd-badge">!beijo</span> / <span class="cmd-badge">!abraco</span> / <span class="cmd-badge">!tapa</span>
-        <p class="cmd-desc">Interaja com os membros marcando-os em ações animadas.</p>
-    </div>
-    <div class="card-item">
-        <span class="cmd-badge">!soco</span> / <span class="cmd-badge">!chute</span> / <span class="cmd-badge">!dança</span>
-        <p class="cmd-desc">Comandos de zoeira e brincadeiras no grupo.</p>
-    </div>
+    <ul class="cmd-list">
+        <li class="cmd-item">
+            <div class="badges-wrapper">
+                <span class="cmd-badge">!beijo</span>
+                <span class="cmd-badge">!abraco</span>
+                <span class="cmd-badge">!tapa</span>
+            </div>
+            <p class="cmd-desc">Interaja com os membros marcando-os em ações animadas.</p>
+        </li>
+        <li class="cmd-item">
+            <div class="badges-wrapper">
+                <span class="cmd-badge">!soco</span>
+                <span class="cmd-badge">!chute</span>
+                <span class="cmd-badge">!dança</span>
+            </div>
+            <p class="cmd-desc">Comandos de zoeira e brincadeiras no grupo.</p>
+        </li>
+    </ul>
 
     <!-- Categoria 5: Administração do Grupo -->
     <div class="section-title">🛡️ Comandos de Admins</div>
-    <div class="card-item">
-        <span class="cmd-badge">!ban</span> / <span class="cmd-badge">!advertir</span>
-        <p class="cmd-desc">Remove ou adverte membros que descumprirem as regras.</p>
-    </div>
-    <div class="card-item">
-        <span class="cmd-badge">!marcar</span> / <span class="cmd-badge">!hidetag</span>
-        <p class="cmd-desc">Notifica todos os membros do grupo para avisos importantes.</p>
-    </div>
-    <div class="card-item">
-        <span class="cmd-badge">!abrir</span> / <span class="cmd-badge">!fechar</span>
-        <p class="cmd-desc">Abre ou fecha o grupo apenas para administradores falarem.</p>
-    </div>
+    <ul class="cmd-list">
+        <li class="cmd-item">
+            <div class="badges-wrapper">
+                <span class="cmd-badge">!ban</span>
+                <span class="cmd-badge">!advertir</span>
+            </div>
+            <p class="cmd-desc">Remove ou adverte membros que descumprirem as regras.</p>
+        </li>
+        <li class="cmd-item">
+            <div class="badges-wrapper">
+                <span class="cmd-badge">!marcar</span>
+                <span class="cmd-badge">!hidetag</span>
+            </div>
+            <p class="cmd-desc">Notifica todos os membros do grupo para avisos importantes.</p>
+        </li>
+        <li class="cmd-item">
+            <div class="badges-wrapper">
+                <span class="cmd-badge">!abrir</span>
+                <span class="cmd-badge">!fechar</span>
+            </div>
+            <p class="cmd-desc">Abre ou fecha o grupo apenas para administradores falarem.</p>
+        </li>
+    </ul>
 
-    <!-- Categoria 6: Segurança -->
+    <!-- Categoria 6: Segurança & Automações -->
     <div class="section-title">🔒 Segurança & Filtros (ADMs)</div>
-    <div class="card-item">
-        <span class="cmd-badge">!antilink</span>
-        <p class="cmd-desc">Remove automaticamente quem enviar links de outros grupos.</p>
-    </div>
-    <div class="card-item">
-        <span class="cmd-badge">!antifake</span>
-        <p class="cmd-desc">Remove números estrangeiros/fakes assim que entram no grupo.</p>
-    </div>
+    <ul class="cmd-list">
+        <li class="cmd-item">
+            <div class="badges-wrapper">
+                <span class="cmd-badge">!listanegra</span>
+                <span class="cmd-badge">!tirardalista</span>
+            </div>
+            <p class="cmd-desc">Banimento automático e permanente de números indesejados.</p>
+        </li>
+        <li class="cmd-item">
+            <div class="badges-wrapper">
+                <span class="cmd-badge">!antilink</span>
+            </div>
+            <p class="cmd-desc">Remove automaticamente quem enviar links de outros grupos.</p>
+        </li>
+        <li class="cmd-item">
+            <div class="badges-wrapper">
+                <span class="cmd-badge">!antifake</span>
+            </div>
+            <p class="cmd-desc">Remove números estrangeiros/fakes assim que entram no grupo.</p>
+        </li>
+        <li class="cmd-item">
+            <div class="badges-wrapper">
+                <span class="cmd-badge">📢 Detector de ADM</span>
+            </div>
+            <p class="cmd-desc">Avisa no chat quem promoveu ou removeu o status de admin de alguém.</p>
+        </li>
+    </ul>
 
     <div class="footer-box">
         <p style="margin: 0 0 8px 0; font-weight: bold; color: #ffffff;">Quer esse bot 24h no seu grupo?</p>
