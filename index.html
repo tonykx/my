@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+@page {
+    size: A4;
+    margin: 8mm;
+    background-color: #0b141a;
+}
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #e9edef;
+    background-color: #0b141a;
+    line-height: 1.4;
+    margin: 0;
+    padding: 0;
+}
+.phone-container {
+    max-width: 480px;
+    margin: 0 auto;
+    background-color: #111b21;
+    border-radius: 16px;
+    padding: 15px;
+    border: 1px solid #222d34;
+}
+.header {
+    text-align: center;
+    padding: 15px 10px;
+    background-color: #202c33;
+    border-radius: 12px;
+    border-bottom: 3px solid #00a884;
+    margin-bottom: 15px;
+}
+h1 {
+    font-size: 16pt;
+    margin: 0 0 4px 0;
+    color: #ffffff;
+}
+.subtitle {
+    font-size: 9pt;
+    color: #8696a0;
+    margin: 0 0 12px 0;
+}
+.btn-main {
+    display: block;
+    background-color: #00a884;
+    color: #ffffff;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 10.5pt;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 8px;
+}
+.btn-test {
+    display: block;
+    background-color: #202c33;
+    color: #00a884;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 10.5pt;
+    padding: 11px;
+    border-radius: 8px;
+    margin-top: 8px;
+    border: 1px solid #00a884;
+}
+
+.section-title {
+    font-size: 10.5pt;
+    color: #00a884;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 18px 0 8px 0;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #222d34;
+    page-break-after: avoid;
+}
+
+.card-item {
+    background-color: #202c33;
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    page-break-inside: avoid;
+}
+.cmd-badge {
+    background-color: #00a884;
+    color: #111b21;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 9pt;
+    display: inline-block;
+}
+.cmd-desc {
+    font-size: 8.5pt;
+    color: #d1d7db;
+    margin: 3px 0 0 0;
+}
+.cmd-example {
+    font-size: 8pt;
+    color: #8696a0;
+    font-style: italic;
+    margin: 2px 0 0 0;
+}
+
+.footer-box {
+    text-align: center;
+    background-color: #202c33;
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 20px;
+    border: 1px solid #00a884;
+}
+</style>
+</head>
+<body>
+
+<div class="phone-container">
+    <div class="header">
+        <h1>🤖 Guia Rápido do Bot</h1>
+        <p class="subtitle">Prefixo oficial: <strong style="color:#00a884;">!</strong> (ex: !play, !ban)</p>
+        <a href="https://chat.whatsapp.com/IivrspUPTe60RZWVhReEC4?s=cl&p=a&ilr=0" class="btn-test">✨ CLIQUE PARA TESTAR GRÁTIS</a>
+        <a href="https://wa.me/557999959508?text=Ol%C3%A1!%20Quero%20alugar%20o%20bot" class="btn-main">📱 ALUGAR BOT NO WHATSAPP</a>
+    </div>
+
+    <!-- Categoria 1: Principais & Músicas -->
+    <div class="section-title">🎵 Principais & Downloads</div>
+    <div class="card-item">
+        <span class="cmd-badge">!play</span>
+        <p class="cmd-desc">Baixa e envia áudios de músicas direto no chat.</p>
+        <p class="cmd-example">Exemplo: !play Henrique e Juliano - Arranhão</p>
+    </div>
+    <div class="card-item">
+        <span class="cmd-badge">!instagram</span>
+        <p class="cmd-desc">Baixa vídeos e fotos do Instagram através do link.</p>
+        <p class="cmd-example">Exemplo: !instagram https://instagram.com/p/...</p>
+    </div>
+    <div class="card-item">
+        <span class="cmd-badge">!gpt</span>
+        <p class="cmd-desc">Conversa com a Inteligência Artificial para tirar dúvidas.</p>
+        <p class="cmd-example">Exemplo: !gpt Como fazer um bolo de cenoura?</p>
+    </div>
+    <div class="card-item">
+        <span class="cmd-badge">!clima</span> / <span class="cmd-badge">!signo</span>
+        <p class="cmd-desc">Consulta a previsão do tempo ou o horóscopo do dia.</p>
+        <p class="cmd-example">Exemplo: !clima São Paulo | !signo leão</p>
+    </div>
+
+    <!-- Categoria 2: Figurinhas Animadas -->
+    <div class="section-title">🖼️ Figurinhas Animadas</div>
+    <div class="card-item">
+        <span class="cmd-badge">!attp</span> até <span class="cmd-badge">!attp5</span>
+        <p class="cmd-desc">Cria figurinhas animadas com textos piscantes e efeitos coloridos.</p>
+        <p class="cmd-example">Exemplo: !attp Oi Sumida</p>
+    </div>
+
+    <!-- Categoria 3: Religiosos & Espirituais -->
+    <div class="section-title">✝️ Bíblia & Fé</div>
+    <div class="card-item">
+        <span class="cmd-badge">!biblia</span> / <span class="cmd-badge">!salmos</span>
+        <p class="cmd-desc">Envia trechos da Bíblia e salmos de reflexão.</p>
+    </div>
+    <div class="card-item">
+        <span class="cmd-badge">!oração</span> / <span class="cmd-badge">!conselhobiblico</span>
+        <p class="cmd-desc">Mensagens diárias de oração e conselhos espirituais.</p>
+    </div>
+    <div class="card-item">
+        <span class="cmd-badge">!perfil</span>
+        <p class="cmd-desc">Mostra suas informações e dados salvos no bot.</p>
+    </div>
+
+    <!-- Categoria 4: Ações Divertidas -->
+    <div class="section-title">🎭 Ações Divertidas</div>
+    <div class="card-item">
+        <span class="cmd-badge">!beijo</span> / <span class="cmd-badge">!abraco</span> / <span class="cmd-badge">!tapa</span>
+        <p class="cmd-desc">Interaja com os membros marcando-os em ações animadas.</p>
+        <p class="cmd-example">Exemplo: !beijo @membro</p>
+    </div>
+    <div class="card-item">
+        <span class="cmd-badge">!soco</span> / <span class="cmd-badge">!chute</span> / <span class="cmd-badge">!dança</span> / <span class="cmd-badge">!casar</span>
+        <p class="cmd-desc">Comandos de zoeira, brincadeiras e casamentos no grupo.</p>
+    </div>
+
+    <!-- Categoria 5: Administração do Grupo -->
+    <div class="section-title">🛡️ Comandos de Admins</div>
+    <div class="card-item">
+        <span class="cmd-badge">!ban</span> / <span class="cmd-badge">!advertir</span>
+        <p class="cmd-desc">Remove ou adverte membros que descumprirem as regras.</p>
+    </div>
+    <div class="card-item">
+        <span class="cmd-badge">!marcar</span> / <span class="cmd-badge">!hidetag</span>
+        <p class="cmd-desc">Notifica todos os membros do grupo para avisos importantes.</p>
+    </div>
+    <div class="card-item">
+        <span class="cmd-badge">!abrir</span> / <span class="cmd-badge">!fechar</span>
+        <p class="cmd-desc">Abre ou fecha o grupo apenas para administradores falarem.</p>
+    </div>
+    <div class="card-item">
+        <span class="cmd-badge">!promover</span> / <span class="cmd-badge">!rebaixar</span>
+        <p class="cmd-desc">Dá ou remove o cargo de administrador de um membro.</p>
+    </div>
+
+    <!-- Categoria 6: Segurança -->
+    <div class="section-title">🔒 Segurança & Filtros (ADMs)</div>
+    <div class="card-item">
+        <span class="cmd-badge">!antilink</span>
+        <p class="cmd-desc">Remove automaticamente quem enviar links de outros grupos.</p>
+    </div>
+    <div class="card-item">
+        <span class="cmd-badge">!antifake</span>
+        <p class="cmd-desc">Remove números estrangeiros/fakes assim que entram no grupo.</p>
+    </div>
+
+    <div class="footer-box">
+        <p style="margin: 0 0 8px 0; font-weight: bold; color: #ffffff;">Quer esse bot 24h no seu grupo?</p>
+        <a href="https://wa.me/557999959508?text=Ol%C3%A1!%20Quero%20alugar%20o%20bot" class="btn-main">Falar com o Dono no WhatsApp</a>
+    </div>
+</div>
+
+</body>
+</html>
+
