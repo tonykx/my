@@ -212,7 +212,7 @@ if('serviceWorker' in navigator && location.protocol==='https:')window.addEventL
  html+=shelf('Séries para maratonar',unique.slice(0,14),'series');
  shelfRoot.innerHTML=html;
  }
- function syncLayout(){const onHome=activeTab==='series'&&!document.body.classList.contains('detail-mode');shelfRoot.classList.toggle('hidden',!onHome||!!document.getElementById('search').value.trim());if(onHome&&!document.getElementById('search').value.trim())renderShelves();}
+ function syncLayout(){const nav=document.querySelector('.bottom-nav [data-nav].active');const onHome=activeTab==='series'&&!document.body.classList.contains('detail-mode')&&nav?.dataset.nav==='home';const searching=!!document.getElementById('search').value.trim();shelfRoot.classList.toggle('hidden',!onHome||searching);if(onHome&&!searching)renderShelves();}
  renderHome=function(q=''){originalHome(q);syncLayout()};
  renderMovies=function(){originalMovies();syncLayout()};
  setTab=function(tab){originalSetTabFinal(tab);syncLayout()};
